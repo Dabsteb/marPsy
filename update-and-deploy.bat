@@ -6,7 +6,7 @@ echo.
 "C:\Program Files\Git\bin\git.exe" add .
 
 :: Создаем коммит
-"C:\Program Files\Git\bin\git.exe" commit -m "🔄 Обновление проекта: синхронизация с GitHub и Railway"
+"C:\Program Files\Git\bin\git.exe" commit -m "Force Railway redeploy"
 
 :: Пушим в репозиторий (Railway автоматически подхватит)
 "C:\Program Files\Git\bin\git.exe" push origin main
