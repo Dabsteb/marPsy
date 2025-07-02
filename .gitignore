@@ -82,7 +82,7 @@ dist
 
 # Gatsby files
 .cache/
-public
+# public (commented out - we need frontend/main-site/public for Railway)
 
 # Vuepress build output
 .vuepress/dist
@@ -149,7 +149,7 @@ coverage/
 
 # Old structure files (temporary, remove after cleanup)
 server/
-public/
+# public/ (commented out - we need frontend/main-site/public for Railway)
 simple_server.js
 config.env
 env.example
