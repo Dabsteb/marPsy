@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Психологический кабинет Марины Чикаидзе</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 0;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .hero-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .service-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .status-indicator {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 20px;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Психологический кабинет</h1>
+            <p class="subtitle">Марины Чикаидзе</p>
+            <div class="status-indicator">
+                ✅ Сайт работает и готов к использованию!
+            </div>
+        </header>
+        
+        <div class="hero-section">
+            <h2>🌟 Добро пожаловать!</h2>
+            <p>Профессиональная психологическая помощь и поддержка. Здесь вы найдете безопасное пространство для работы с собой, решения личных вопросов и достижения внутренней гармонии.</p>
+            
+            <a href="/api/status" class="cta-button">📊 Проверить статус системы</a>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">💬</div>
+                <h3>Индивидуальные консультации</h3>
+                <p>Персональные сессии для работы с личными вопросами, тревогой, депрессией и другими психологическими состояниями.</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">👥</div>
+                <h3>Семейная терапия</h3>
+                <p>Помощь в решении семейных конфликтов, улучшении отношений и построении здоровой коммуникации.</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">🎯</div>
+                <h3>Личностный рост</h3>
+                <p>Программы развития самосознания, повышения самооценки и достижения личных целей.</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">🧘</div>
+                <h3>Стрессменеджмент</h3>
+                <p>Техники управления стрессом, релаксации и восстановления эмоционального баланса.</p>
+            </div>
+        </div>
+        
+        <div class="hero-section">
+            <h2>📞 Контакты</h2>
+            <p>Готовы начать путь к лучшей версии себя?</p>
+            <p><strong>Телефон:</strong> +7 (XXX) XXX-XX-XX</p>
+            <p><strong>Email:</strong> marina@psychology-cabinet.ru</p>
+            <p><strong>График работы:</strong> Пн-Пт 10:00-20:00, Сб 10:00-16:00</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Психологический кабинет Марины Чикаидзе. Все права защищены.</p>
+        <p>Сайт работает на Railway Platform</p>
+    </footer>
+    
+    <script>
+        // Проверка статуса API
+        fetch('/api/status')
+            .then(response => response.json())
+            .then(data => {
+                console.log('API Status:', data);
+                if (data.success) {
+                    console.log('✅ Backend работает корректно');
+                }
+            })
+            .catch(error => {
+                console.error('❌ Ошибка подключения к API:', error);
+            });
+    </script>
+</body>
+</html>
