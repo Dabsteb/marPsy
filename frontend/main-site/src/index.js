@@ -14,8 +14,17 @@ class PsychologyWebsite {
         this.initNavigation();
         this.initScrollEffects();
         this.initFormHandling();
+        this.initReviewForm();
+        this.initThemeToggle();
+        this.initSidebar();
+        this.initStarRating();
+        this.initQuiz();
         this.initAnimations();
         this.checkApiStatus();
+        
+        // Инициализация переменных
+        this.currentQuizStep = 1;
+        this.totalQuizSteps = 4;
         
         // Запускаем после загрузки DOM
         if (document.readyState === 'loading') {
@@ -489,10 +498,349 @@ ${data.message ? `Сообщение: ${data.message}` : ''}`;
             }
         };
     }
+
+    // Переключатель темы
+    initThemeToggle() {
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        if (!themeToggle || !themeIcon) return;
+        
+        // Определяем начальную тему
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+        
+        this.setTheme(initialTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            this.setTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+        
+        // Слушаем системные изменения темы
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                this.setTheme(e.matches ? 'dark' : 'light');
+            }
+        });
+    }
+    
+    setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        const themeIcon = document.getElementById('theme-icon');
+        if (themeIcon) {
+            themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+    }
+
+    // Боковое меню
+    initSidebar() {
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (!sidebarToggle || !sidebar) return;
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            sidebarToggle.classList.toggle('active');
+            
+            // Скрываем уведомления при открытии
+            if (sidebar.classList.contains('open')) {
+                const badge = document.getElementById('notification-badge');
+                if (badge) badge.style.display = 'none';
+            }
+        });
+        
+        // Закрыть при клике вне меню
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+                sidebarToggle.classList.remove('active');
+            }
+        });
+    }
+
+    // Интерактивные звезды
+    initStarRating() {
+        const starRating = document.getElementById('review-rating');
+        if (!starRating) return;
+        
+        const stars = starRating.querySelectorAll('.star');
+        const ratingValue = document.getElementById('rating-value');
+        
+        let currentRating = 0;
+        
+        stars.forEach((star, index) => {
+            star.addEventListener('mouseenter', () => {
+                this.highlightStars(stars, index + 1);
+            });
+            
+            star.addEventListener('mouseleave', () => {
+                this.highlightStars(stars, currentRating);
+            });
+            
+            star.addEventListener('click', () => {
+                currentRating = index + 1;
+                ratingValue.value = currentRating;
+                this.highlightStars(stars, currentRating);
+            });
+        });
+    }
+    
+    highlightStars(stars, rating) {
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        });
+    }
+
+    // Форма отзывов
+    initReviewForm() {
+        const reviewForm = document.getElementById('review-form');
+        const reviewCounter = document.getElementById('review-counter');
+        const reviewText = document.getElementById('review-text');
+        
+        if (reviewText && reviewCounter) {
+            reviewText.addEventListener('input', () => {
+                const length = reviewText.value.length;
+                reviewCounter.textContent = length;
+                
+                if (length > 1000) {
+                    reviewCounter.style.color = '#ff4757';
+                } else {
+                    reviewCounter.style.color = 'var(--text-secondary)';
+                }
+            });
+        }
+        
+        if (reviewForm) {
+            reviewForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await this.handleReviewSubmission(reviewForm);
+            });
+        }
+    }
+    
+    async handleReviewSubmission(form) {
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Проверяем оценку
+        if (data.rating === '0') {
+            this.showNotification('<i class="fas fa-star"></i> Пожалуйста, поставьте оценку', 'error');
+            return;
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправляем...';
+        submitBtn.disabled = true;
+        
+        try {
+            // Имитация отправки отзыва
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            this.showNotification(
+                '<i class="fas fa-check-circle"></i> Отзыв успешно отправлен! Он будет опубликован после модерации.',
+                'success'
+            );
+            
+            form.reset();
+            document.getElementById('rating-value').value = '0';
+            document.getElementById('review-counter').textContent = '0';
+            this.highlightStars(document.querySelectorAll('#review-rating .star'), 0);
+            
+        } catch (error) {
+            this.showNotification('<i class="fas fa-times-circle"></i> Ошибка при отправке отзыва', 'error');
+        } finally {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }
+
+    // Анкета
+    initQuiz() {
+        const quizModal = document.getElementById('quiz-modal');
+        if (!quizModal) return;
+        
+        // Показываем анкету для новых пользователей
+        setTimeout(() => {
+            if (!localStorage.getItem('quiz-completed')) {
+                this.showQuizPrompt();
+            }
+        }, 5000);
+    }
+    
+    showQuizPrompt() {
+        const quizModal = document.getElementById('quiz-modal');
+        if (quizModal) {
+            quizModal.classList.add('active');
+        }
+    }
+    
+    nextQuizStep() {
+        if (this.currentQuizStep < this.totalQuizSteps) {
+            // Валидация текущего шага
+            if (!this.validateQuizStep(this.currentQuizStep)) {
+                return;
+            }
+            
+            // Скрываем текущий шаг
+            document.querySelector(`[data-step="${this.currentQuizStep}"]`).style.display = 'none';
+            
+            this.currentQuizStep++;
+            
+            // Показываем следующий шаг
+            document.querySelector(`[data-step="${this.currentQuizStep}"]`).style.display = 'block';
+            
+            // Обновляем кнопки
+            document.getElementById('quiz-prev').style.display = 'inline-flex';
+            
+            if (this.currentQuizStep === this.totalQuizSteps) {
+                document.getElementById('quiz-next').style.display = 'none';
+                document.getElementById('quiz-submit').style.display = 'inline-flex';
+            }
+        }
+    }
+    
+    prevQuizStep() {
+        if (this.currentQuizStep > 1) {
+            // Скрываем текущий шаг
+            document.querySelector(`[data-step="${this.currentQuizStep}"]`).style.display = 'none';
+            
+            this.currentQuizStep--;
+            
+            // Показываем предыдущий шаг
+            document.querySelector(`[data-step="${this.currentQuizStep}"]`).style.display = 'block';
+            
+            // Обновляем кнопки
+            if (this.currentQuizStep === 1) {
+                document.getElementById('quiz-prev').style.display = 'none';
+            }
+            
+            document.getElementById('quiz-next').style.display = 'inline-flex';
+            document.getElementById('quiz-submit').style.display = 'none';
+        }
+    }
+    
+    validateQuizStep(step) {
+        const stepElement = document.querySelector(`[data-step="${step}"]`);
+        const requiredFields = stepElement.querySelectorAll('[required]');
+        
+        for (let field of requiredFields) {
+            if (field.type === 'radio' || field.type === 'checkbox') {
+                const name = field.name;
+                const checkedBoxes = stepElement.querySelectorAll(`[name="${name}"]:checked`);
+                if (checkedBoxes.length === 0) {
+                    this.showNotification('<i class="fas fa-exclamation-circle"></i> Пожалуйста, заполните все обязательные поля', 'error');
+                    return false;
+                }
+            } else if (!field.value.trim()) {
+                this.showNotification('<i class="fas fa-exclamation-circle"></i> Пожалуйста, заполните все обязательные поля', 'error');
+                field.focus();
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    async submitQuiz() {
+        if (!this.validateQuizStep(this.currentQuizStep)) {
+            return;
+        }
+        
+        const form = document.getElementById('client-quiz');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        try {
+            // Имитация отправки анкеты
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            this.showNotification(
+                '<i class="fas fa-check-circle"></i> Анкета успешно отправлена! Мы свяжемся с вами в ближайшее время.',
+                'success'
+            );
+            
+            localStorage.setItem('quiz-completed', 'true');
+            this.closeQuiz();
+            
+        } catch (error) {
+            this.showNotification('<i class="fas fa-times-circle"></i> Ошибка при отправке анкеты', 'error');
+        }
+    }
+    
+    closeQuiz() {
+        const quizModal = document.getElementById('quiz-modal');
+        if (quizModal) {
+            quizModal.classList.remove('active');
+        }
+    }
+    
+    startQuiz() {
+        this.currentQuizStep = 1;
+        // Сброс формы
+        document.getElementById('client-quiz').reset();
+        // Показываем первый шаг
+        document.querySelectorAll('.quiz-step').forEach((step, index) => {
+            step.style.display = index === 0 ? 'block' : 'none';
+        });
+        // Сброс кнопок
+        document.getElementById('quiz-prev').style.display = 'none';
+        document.getElementById('quiz-next').style.display = 'inline-flex';
+        document.getElementById('quiz-submit').style.display = 'none';
+        
+        this.showQuizPrompt();
+    }
+    
+    closeSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        if (sidebar) sidebar.classList.remove('open');
+        if (sidebarToggle) sidebarToggle.classList.remove('active');
+    }
 }
+
+// Глобальные функции для HTML
+window.startQuiz = function() {
+    if (window.website) {
+        window.website.startQuiz();
+    }
+};
+
+window.closeQuiz = function() {
+    if (window.website) {
+        window.website.closeQuiz();
+    }
+};
+
+window.nextQuizStep = function() {
+    if (window.website) {
+        window.website.nextQuizStep();
+    }
+};
+
+window.prevQuizStep = function() {
+    if (window.website) {
+        window.website.prevQuizStep();
+    }
+};
+
+window.closeSidebar = function() {
+    if (window.website) {
+        window.website.closeSidebar();
+    }
+};
 
 // Инициализация
 const website = new PsychologyWebsite();
+window.website = website;
 
 // Экспорт для использования в других модулях
 export default website;
