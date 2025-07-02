@@ -6,7 +6,7 @@
   "scripts": {
     "install:all": "npm install",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:backend": "npm start",
+    "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend/main-site && npm run dev",
     "build": "npm install",
     "start": "node src/app.js",
