@@ -198,7 +198,8 @@ class PsychologyWebsite {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
+            credentials: 'include'
         });
 
         if (!response.ok) {
@@ -206,52 +207,95 @@ class PsychologyWebsite {
             throw new Error(errorData.message || 'Ошибка сервера');
         }
 
-        return await response.json();
+        return response.json();
     }
 
     sendToWhatsApp(data) {
+        // Генерируем WhatsApp ссылку
         const phone = '79197448522';
-        const message = `Новая заявка с сайта:
+        const message = `Заявка с сайта:
 Имя: ${data.name}
 Телефон: ${data.phone}
-Email: ${data.email || 'не указан'}
 Услуга: ${data.service}
-Сообщение: ${data.message || 'не указано'}`;
+${data.email ? `Email: ${data.email}` : ''}
+${data.message ? `Сообщение: ${data.message}` : ''}`;
         
         const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-        // Открываем в новом окне через небольшую задержку
+        
+        // Открываем WhatsApp через 2 секунды
         setTimeout(() => {
             window.open(whatsappUrl, '_blank');
         }, 2000);
     }
 
     addRealTimeValidation() {
-        const inputs = document.querySelectorAll('input[required], select[required]');
+        const form = document.getElementById('contact-form');
+        if (!form) return;
+
+        const fields = form.querySelectorAll('input[required], select[required], textarea[required]');
         
-        inputs.forEach(input => {
-            input.addEventListener('blur', () => {
-                this.validateField(input);
+        fields.forEach(field => {
+            field.addEventListener('blur', () => {
+                this.validateField(field);
             });
             
-            input.addEventListener('input', () => {
-                if (input.classList.contains('error')) {
-                    this.validateField(input);
+            field.addEventListener('input', () => {
+                // Убираем ошибку при вводе
+                if (field.classList.contains('error')) {
+                    field.classList.remove('error');
+                    const errorElement = field.parentNode.querySelector('.field-error');
+                    if (errorElement) {
+                        errorElement.remove();
+                    }
                 }
             });
         });
     }
 
     validateField(field) {
-        const isValid = field.checkValidity();
-        
-        if (isValid) {
-            field.classList.remove('error');
-            field.classList.add('valid');
-        } else {
-            field.classList.remove('valid');
-            field.classList.add('error');
+        const value = field.value.trim();
+        let isValid = true;
+        let errorMessage = '';
+
+        // Убираем предыдущие ошибки
+        field.classList.remove('error');
+        const existingError = field.parentNode.querySelector('.field-error');
+        if (existingError) {
+            existingError.remove();
         }
-        
+
+        // Валидация в зависимости от типа поля
+        if (field.name === 'name' && value.length < 2) {
+            isValid = false;
+            errorMessage = 'Введите ваше имя';
+        } else if (field.name === 'phone') {
+            const phoneRegex = /^(\+7|8)?[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/;
+            if (!phoneRegex.test(value)) {
+                isValid = false;
+                errorMessage = 'Введите корректный номер телефона';
+            }
+        } else if (field.name === 'email' && value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+                isValid = false;
+                errorMessage = 'Введите корректный email';
+            }
+        } else if (field.name === 'service' && !value) {
+            isValid = false;
+            errorMessage = 'Выберите тип консультации';
+        }
+
+        if (!isValid) {
+            field.classList.add('error');
+            const errorElement = document.createElement('div');
+            errorElement.className = 'field-error';
+            errorElement.textContent = errorMessage;
+            errorElement.style.color = '#e53e3e';
+            errorElement.style.fontSize = '0.875rem';
+            errorElement.style.marginTop = '0.25rem';
+            field.parentNode.appendChild(errorElement);
+        }
+
         return isValid;
     }
 
@@ -332,23 +376,60 @@ Email: ${data.email || 'не указан'}
             const response = await fetch('/api/health');
             const data = await response.json();
             
-            const statusElement = document.getElementById('api-status');
-            if (statusElement) {
-                if (data.success) {
-                    statusElement.textContent = '🟢 Система работает';
-                    statusElement.style.color = '#00D4AA';
-                } else {
-                    throw new Error('API недоступен');
-                }
+            if (data.success) {
+                console.log('✅ API подключен:', data.message);
+                
+                // Показываем индикатор работы API
+                this.showApiStatus(true);
+            } else {
+                throw new Error('API недоступно');
             }
         } catch (error) {
-            const statusElement = document.getElementById('api-status');
-            if (statusElement) {
-                statusElement.textContent = '🟡 Техническое обслуживание';
-                statusElement.style.color = '#FFB347';
-            }
-            console.warn('API недоступен:', error);
+            console.warn('⚠️ API недоступно:', error.message);
+            this.showApiStatus(false);
         }
+    }
+
+    showApiStatus(isConnected) {
+        // Создаем индикатор статуса API
+        const statusIndicator = document.createElement('div');
+        statusIndicator.id = 'api-status';
+        statusIndicator.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            ${isConnected 
+                ? 'background: #48bb78; color: white;' 
+                : 'background: #f56565; color: white;'
+            }
+        `;
+        
+        statusIndicator.innerHTML = isConnected 
+            ? '🟢 Онлайн' 
+            : '🔴 Офлайн';
+        
+        // Удаляем предыдущий индикатор
+        const existing = document.getElementById('api-status');
+        if (existing) {
+            existing.remove();
+        }
+        
+        document.body.appendChild(statusIndicator);
+        
+        // Автоматически скрываем через 3 секунды
+        setTimeout(() => {
+            if (statusIndicator.parentNode) {
+                statusIndicator.style.opacity = '0';
+                setTimeout(() => {
+                    statusIndicator.remove();
+                }, 300);
+            }
+        }, 3000);
     }
 
     // Система уведомлений

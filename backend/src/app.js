@@ -125,8 +125,10 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/psycholog
     process.exit(1);
 });
 
-// Базовые API маршруты (только аутентификация)
-app.use('/auth', require('./routes/auth'));
+// API маршруты
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/contacts', require('./routes/contacts'));
+app.use('/api/admin', require('./routes/admin'));
 
 // Базовый API endpoint для проверки
 app.get('/api/status', (req, res) => {
@@ -134,7 +136,8 @@ app.get('/api/status', (req, res) => {
         success: true,
         message: 'API сервер работает',
         timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
+        version: '2.0.0'
     });
 });
 
@@ -144,11 +147,13 @@ app.get('/api/health', (req, res) => {
         success: true,
         message: 'Psychology Cabinet API is running',
         timestamp: new Date().toISOString(),
-        uptime: process.uptime()
+        uptime: process.uptime(),
+        memory: process.memoryUsage(),
+        version: '2.0.0'
     });
 });
 
-// Contact form submission endpoint
+// Contact form submission endpoint (дублируем для совместимости)
 app.post('/api/contact', async (req, res) => {
     try {
         const { name, phone, email, service, message } = req.body;
@@ -273,6 +278,78 @@ app.get('/api/contacts/stats', async (req, res) => {
     }
 });
 
+// API endpoint для получения отзывов
+app.get('/api/reviews', async (req, res) => {
+    try {
+        const Review = require('./models/Review');
+        const { featured = false, limit = 10 } = req.query;
+        
+        let query = featured === 'true' ? Review.getFeatured() : Review.getApproved();
+        const reviews = await query.limit(parseInt(limit));
+        
+        res.json({
+            success: true,
+            data: reviews
+        });
+    } catch (error) {
+        console.error('Reviews error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка получения отзывов'
+        });
+    }
+});
+
+// API endpoint для создания отзыва
+app.post('/api/reviews', async (req, res) => {
+    try {
+        const Review = require('./models/Review');
+        const { name, email, rating, title, text, service, isAnonymous } = req.body;
+        
+        // Валидация
+        if (!name || !rating || !text || !service) {
+            return res.status(400).json({
+                success: false,
+                message: 'Обязательные поля: имя, оценка, текст отзыва, услуга'
+            });
+        }
+        
+        const reviewData = {
+            name: name.trim(),
+            email: email ? email.trim() : null,
+            rating: parseInt(rating),
+            title: title ? title.trim() : null,
+            text: text.trim(),
+            service,
+            isAnonymous: Boolean(isAnonymous),
+            ip: req.ip || req.connection.remoteAddress,
+            userAgent: req.get('User-Agent')
+        };
+        
+        const savedReview = await Review.create(reviewData);
+        
+        console.log('⭐ Новый отзыв создан:', {
+            id: savedReview._id,
+            name: reviewData.name,
+            rating: reviewData.rating,
+            service: reviewData.service
+        });
+        
+        res.status(201).json({
+            success: true,
+            message: 'Спасибо за отзыв! Он будет опубликован после модерации.',
+            data: { id: savedReview._id }
+        });
+        
+    } catch (error) {
+        console.error('Review creation error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка создания отзыва'
+        });
+    }
+});
+
 // Helper functions
 async function sendNotificationEmail(contactData) {
     // Log notification (implement email service later)
@@ -342,6 +419,7 @@ server.listen(PORT, '0.0.0.0', () => {
     console.log(`🌐 WebSocket сервер активен`);
     console.log(`🔐 Система готова к разработке`);
     console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`📱 Live site: https://backend-production-2c24.up.railway.app`);
 });
 
 module.exports = { app, server, wsServer }; 

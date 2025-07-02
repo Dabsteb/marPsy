@@ -9,7 +9,7 @@ module.exports = (env, argv) => {
     entry: './src/index.js',
     
     output: {
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, 'public'),
       filename: isProduction ? '[name].[contenthash].js' : '[name].js',
       clean: true,
       publicPath: '/'
@@ -47,7 +47,7 @@ module.exports = (env, argv) => {
     
     plugins: [
       new HtmlWebpackPlugin({
-        template: './public/index.html',
+        template: './index.html',
         filename: 'index.html',
         minify: isProduction ? {
           removeComments: true,
@@ -72,7 +72,7 @@ module.exports = (env, argv) => {
     
     devServer: {
       static: {
-        directory: path.join(__dirname, 'dist')
+        directory: path.join(__dirname, 'public')
       },
       port: 5000,
       open: true,

@@ -201,42 +201,37 @@ contactSchema.statics.getStats = function() {
                 _id: '$status',
                 count: { $sum: 1 }
             }
-        },
-        {
-            $project: {
-                status: '$_id',
-                count: 1,
-                _id: 0
-            }
         }
     ]);
 };
 
-contactSchema.statics.getDailyStats = function(days = 30) {
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
+// Пагинация (простая реализация без mongoose-paginate-v2)
+contactSchema.statics.paginate = async function(filter = {}, options = {}) {
+    const page = options.page || 1;
+    const limit = options.limit || 20;
+    const skip = (page - 1) * limit;
+    const sort = options.sort || { createdAt: -1 };
     
-    return this.aggregate([
-        {
-            $match: {
-                createdAt: { $gte: startDate }
-            }
-        },
-        {
-            $group: {
-                _id: {
-                    $dateToString: {
-                        format: '%Y-%m-%d',
-                        date: '$createdAt'
-                    }
-                },
-                count: { $sum: 1 }
-            }
-        },
-        {
-            $sort: { _id: 1 }
-        }
-    ]);
+    const docs = await this.find(filter)
+        .sort(sort)
+        .skip(skip)
+        .limit(limit)
+        .populate(options.populate || '');
+    
+    const totalDocs = await this.countDocuments(filter);
+    const totalPages = Math.ceil(totalDocs / limit);
+    
+    return {
+        docs,
+        totalDocs,
+        limit,
+        page,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+        nextPage: page < totalPages ? page + 1 : null,
+        prevPage: page > 1 ? page - 1 : null
+    };
 };
 
 // Middleware для логирования изменений
