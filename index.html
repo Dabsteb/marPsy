@@ -16,334 +16,696 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="src/styles/global.css">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --text: #2d3748;
+            --text-light: #718096;
+            --white: #ffffff;
+            --light: #f7fafc;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--white);
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* Навигация */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .btn-nav {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .btn-nav:hover { transform: translateY(-2px); }
+
+        /* Hero секция */
+        .hero {
+            padding: 8rem 0 4rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover { transform: translateY(-3px); }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+
+        /* Фото секция */
+        .photo-section {
+            padding: 4rem 0;
+            background: var(--light);
+            text-align: center;
+        }
+
+        .photo-placeholder {
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            border-radius: 20px;
+            margin: 2rem auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-placeholder::before {
+            content: "📸";
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .photo-placeholder::after {
+            content: "Фотография Марины Чикаидзе будет добавлена";
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+            width: 80%;
+            text-align: center;
+        }
+
+        /* Цены */
+        .pricing {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .price-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .price-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .price-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        }
+
+        .price-card.featured::before {
+            content: "🌟 Популярно";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .price-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .duration {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .price-features li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .price-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .special-offers {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid #0891b2;
+        }
+
+        .special-offers h3 {
+            color: #0369a1;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .special-offers p {
+            color: #075985;
+            font-size: 1.125rem;
+            line-height: 1.8;
+        }
+
+        /* Услуги */
+        .services {
+            padding: 5rem 0;
+            background: var(--light);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .service-desc {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* О психологе */
+        .about {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 1rem;
+        }
+
+        .methods {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+        }
+
+        .methods h4 {
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .methods p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Контакты */
+        .contact {
+            padding: 5rem 0;
+            background: var(--light);
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .contact-form {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Футер */
+        .footer {
+            background: var(--text);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer h4 {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .services-grid { grid-template-columns: 1fr; }
+            .about-content { grid-template-columns: 1fr; }
+            .contact-content { grid-template-columns: 1fr; }
+            .photo-placeholder { width: 250px; height: 320px; }
+        }
+    </style>
 </head>
 <body>
     <!-- Навигация -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="#home" class="nav-logo">
-                🧠 <span>Психология на каждый день!</span>
-            </a>
-            
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="#home" class="nav-link">Главная</a></li>
-                <li><a href="#services" class="nav-link">Услуги</a></li>
-                <li><a href="#about" class="nav-link">О психологе</a></li>
-                <li><a href="#testimonials" class="nav-link">Отзывы</a></li>
-                <li><a href="#contact" class="nav-link nav-cta">Записаться</a></li>
-            </ul>
-            
-            <div class="nav-toggle" id="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="#home" class="logo">🧠 Психология на каждый день!</a>
+                <ul class="nav-links">
+                    <li><a href="#home">Главная</a></li>
+                    <li><a href="#pricing">Цены</a></li>
+                    <li><a href="#services">Услуги</a></li>
+                    <li><a href="#about">О психологе</a></li>
+                    <li><a href="#contact" class="btn-nav">Записаться</a></li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero секция -->
+    <!-- Hero -->
     <section id="home" class="hero">
-        <div class="hero-bg">
-            <div class="floating-shapes">
-                <div class="shape shape-1"></div>
-                <div class="shape shape-2"></div>
-                <div class="shape shape-3"></div>
+        <div class="container">
+            <h1>Найдите внутренний покой и гармонию с собой</h1>
+            <p>Профессиональная психологическая помощь от магистра психологических наук с 8-летним опытом. Интегральное нейропрограммирование, когнитивно-поведенческая терапия, гештальт терапия, психоанализ, арт-терапия, ДПДГ и доказательные методы для достижения внутренней гармонии и личностного роста.</p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-primary">📅 Записаться на сессию</a>
+                <a href="#pricing" class="btn btn-secondary">💰 Узнать цены</a>
             </div>
         </div>
-        
-        <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-badge">✨ Психология на каждый день! 2025</div>
-                <h1 class="hero-title">
-                    Найдите внутренний<br>
-                    <span class="gradient-text">покой и гармонию с собой</span>
-                </h1>
-                <p class="hero-subtitle">
-                    Профессиональная психологическая помощь от магистра психологических наук с 8-летним опытом. 
-                    Интегральное нейропрограммирование, когнитивно-поведенческая терапия, гештальт терапия, психоанализ, арт-терапия, ДПДГ 
-                    и доказательные методы для достижения внутренней гармонии и личностного роста.
-                </p>
-                
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">500+</div>
-                        <div class="stat-label">довольных клиентов</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">8</div>
-                        <div class="stat-label">лет практики</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">95%</div>
-                        <div class="stat-label">положительных результатов</div>
-                    </div>
+    </section>
+
+    <!-- Фото -->
+    <section class="photo-section">
+        <div class="container">
+            <h2 class="section-title">Ваш психолог</h2>
+            <div class="photo-placeholder"></div>
+            <h3 style="margin-top: 1rem; color: var(--primary);">Марина Чикаидзе</h3>
+            <p style="color: var(--text-light); font-size: 1.125rem;">Магистр психологии • 8 лет практики</p>
+        </div>
+    </section>
+
+    <!-- Цены -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Цены и длительность сеансов</h2>
+                <p class="section-subtitle">Прозрачное ценообразование без скрытых платежей. Длительность каждого сеанса указана точно.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Индивидуальные сеансы -->
+                <div class="price-card featured">
+                    <h3 class="price-title">Индивидуальные сеансы</h3>
+                    <div class="duration">⏱️ 50 минут</div>
+                    <div class="price">3 500 ₽</div>
+                    <ul class="price-features">
+                        <li>Персональный подход</li>
+                        <li>Работа с любыми запросами</li>
+                        <li>Видеосвязь HD качества</li>
+                        <li>Запись сеанса по запросу</li>
+                        <li>Домашние задания</li>
+                        <li>Поддержка между сеансами</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary">Записаться</a>
                 </div>
-                
-                <div class="hero-actions">
-                    <a href="#contact" class="btn btn-primary">
-                        <span>📅 Записаться на сессию</span>
-                    </a>
-                    <a href="#about" class="btn btn-secondary">
-                        <span>💡 Узнать больше</span>
-                    </a>
+
+                <!-- Семейные сеансы -->
+                <div class="price-card">
+                    <h3 class="price-title">Семейные сеансы</h3>
+                    <div class="duration">⏱️ 80 минут</div>
+                    <div class="price">5 500 ₽</div>
+                    <ul class="price-features">
+                        <li>Работа с парой/семьей</li>
+                        <li>Увеличенная длительность</li>
+                        <li>Семейная системная терапия</li>
+                        <li>Техники коммуникации</li>
+                        <li>Работа с конфликтами</li>
+                        <li>Планы для всей семьи</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-secondary">Записаться</a>
                 </div>
             </div>
-            
-            <div class="hero-visual">
-                <div class="therapy-illustration">
-                    <div class="illustration-bg"></div>
-                    <div class="illustration-elements">
-                        <div class="element element-brain">🧠</div>
-                        <div class="element element-heart">💚</div>
-                        <div class="element element-peace">☮️</div>
-                        <div class="element element-growth">🌱</div>
-                    </div>
-                </div>
+
+            <!-- Специальные предложения -->
+            <div class="special-offers">
+                <h3>💡 Специальные предложения</h3>
+                <p>
+                    🎯 <strong>Пакет из 4 сеансов:</strong> 12 000 ₽ (экономия 2 000 ₽)<br>
+                    🌟 <strong>Первая консультация:</strong> 15 минут бесплатно для знакомства<br>
+                    📱 <strong>Экстренная поддержка:</strong> WhatsApp консультации 1 500 ₽/30 мин
+                </p>
             </div>
         </div>
     </section>
 
     <!-- Услуги -->
-    <section id="services" class="services-section">
-        <div class="section-container">
+    <section id="services" class="services">
+        <div class="container">
             <div class="section-header">
-                <div class="section-badge">Наши услуги</div>
-                <h2 class="section-title">Комплексная психологическая помощь</h2>
-                <p class="section-subtitle">
-                    Современные методы терапии для решения различных жизненных задач
-                </p>
+                <h2 class="section-title">Дополнительные услуги</h2>
+                <p class="section-subtitle">Расширенный спектр психологической помощи</p>
             </div>
-            
+
             <div class="services-grid">
-                <div class="service-card featured">
-                    <div class="service-icon">👤</div>
-                    <h3 class="service-title">Индивидуальные онлайн консультации</h3>
-                    <p class="service-description">
-                        Персональный подход к решению ваших психологических задач. 
-                        Работаем с тревожностью, депрессией, стрессом через видеосвязь.
-                    </p>
-                    <div class="service-features">
-                        <span class="feature">✓ Комфорт дома</span>
-                        <span class="feature">✓ Гибкое расписание</span>
-                        <span class="feature">✓ Полная конфиденциальность</span>
-                    </div>
-                    <div class="service-price">от 3 000 ₽ / сессия</div>
-                    <a href="#contact" class="btn btn-primary btn-service">Записаться</a>
-                </div>
-                
-                <div class="service-card">
-                    <div class="service-icon">👨‍👩‍👧‍👦</div>
-                    <h3 class="service-title">Семейная терапия онлайн</h3>
-                    <p class="service-description">
-                        Восстановление гармонии в отношениях через видеосвязь. 
-                        Работа с конфликтами, улучшение коммуникации.
-                    </p>
-                    <div class="service-price">от 4 500 ₽ / сессия</div>
-                    <a href="#contact" class="btn btn-outline btn-service">Записаться</a>
-                </div>
-                
-                <div class="service-card">
-                    <div class="service-icon">👥</div>
-                    <h3 class="service-title">Групповые онлайн занятия</h3>
-                    <p class="service-description">
-                        Работа в группе единомышленников. Поддержка, обмен опытом 
-                        и совместное решение схожих проблем.
-                    </p>
-                    <div class="service-price">от 2 000 ₽ / сессия</div>
-                    <a href="#contact" class="btn btn-outline btn-service">Записаться</a>
-                </div>
-                
                 <div class="service-card">
                     <div class="service-icon">🎨</div>
                     <h3 class="service-title">Арт-терапия онлайн</h3>
-                    <p class="service-description">
-                        Творческий подход к решению внутренних конфликтов. 
-                        Исцеление через искусство и самовыражение.
-                    </p>
-                    <div class="service-price">от 3 500 ₽ / сессия</div>
-                    <a href="#contact" class="btn btn-outline btn-service">Записаться</a>
+                    <p class="service-desc">Творческий подход к решению внутренних конфликтов. Исцеление через искусство и самовыражение.</p>
+                    <div class="price">50 мин / 3 500 ₽</div>
                 </div>
-                
+
                 <div class="service-card">
                     <div class="service-icon">🌟</div>
-                    <h3 class="service-title">Авторская программа "Я - хозяин своей судьбы!"</h3>
-                    <p class="service-description">
-                        Комплексная программа по развитию личностной силы, самоопределению 
-                        и принятию ответственности за свою жизнь.
-                    </p>
-                    <div class="service-price">от 5 000 ₽ / программа</div>
-                    <a href="#contact" class="btn btn-outline btn-service">Записаться</a>
+                    <h3 class="service-title">Программа "Я - хозяин своей судьбы!"</h3>
+                    <p class="service-desc">Комплексная программа по развитию личностной силы, самоопределению и принятию ответственности за свою жизнь.</p>
+                    <div class="price">6 сеансов / 18 000 ₽</div>
                 </div>
-                
+
                 <div class="service-card">
                     <div class="service-icon">💫</div>
-                    <h3 class="service-title">Авторская программа "Я выбираю себя!"</h3>
-                    <p class="service-description">
-                        Трансформационная программа для повышения самооценки, 
-                        принятия себя и построения здоровых границ.
-                    </p>
-                    <div class="service-price">от 5 000 ₽ / программа</div>
-                    <a href="#contact" class="btn btn-outline btn-service">Записаться</a>
+                    <h3 class="service-title">Программа "Я выбираю себя!"</h3>
+                    <p class="service-desc">Трансформационная программа для повышения самооценки, принятия себя и построения здоровых границ.</p>
+                    <div class="price">6 сеансов / 18 000 ₽</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- О психологе -->
-    <section id="about" class="about-section">
-        <div class="section-container">
+    <section id="about" class="about">
+        <div class="container">
             <div class="about-content">
-                <div class="about-visual">
-                    <div class="psychologist-card">
-                        <div class="card-image">
-                            <div class="avatar-placeholder">👩‍⚕️</div>
-                            <div class="online-indicator">
-                                <span class="status-dot"></span>
-                                <span>Онлайн</span>
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <h3>Марина Чикаидзе</h3>
-                            <p>Магистр психологии</p>
-                            <div class="credentials-mini">
-                                <span>8 лет опыта</span>
-                                <span>500+ клиентов</span>
-                            </div>
-                        </div>
+                <div class="about-card">
+                    <div class="avatar">👩‍⚕️</div>
+                    <h3>Марина Чикаидзе</h3>
+                    <p>Магистр психологии</p>
+                    <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.9;">
+                        <div>✨ 8 лет практики</div>
+                        <div>🎓 Магистр психологических наук</div>
+                        <div>🌟 500+ довольных клиентов</div>
                     </div>
                 </div>
-                
-                <div class="about-text">
-                    <div class="section-badge">О специалисте</div>
-                    <h2 class="section-title">Моя миссия</h2>
-                    
-                    <p class="about-description">
-                        Помогаю людям найти внутренний покой и гармонию с собой, развивать личностный 
-                        потенциал и достигать поставленных целей. Использую доказательные методы 
-                        психотерапии и коучинга для создания устойчивых позитивных изменений в жизни 
-                        клиентов.
-                    </p>
-                    
-                    <p class="about-description">
-                        Специализируюсь на когнитивно-поведенческой терапии, работе с эмоциональными 
-                        состояниями, семейной терапии и трансформационном коучинге. Мой подход 
-                        основан на научных исследованиях и многолетнем практическом опыте.
-                    </p>
-                    
-                    <div class="methods-section">
-                        <h4>Основные методы работы:</h4>
-                        <p class="methods-list">
-                            Интегральное нейропрограммирование, когнитивно-поведенческая терапия, 
-                            гештальт терапия, психоанализ, арт-терапия, ДПДГ
-                        </p>
-                    </div>
-                    
-                    <div class="approach-cards">
-                        <div class="approach-item">
-                            <div class="approach-icon">🎯</div>
-                            <div class="approach-content">
-                                <h4>Индивидуальный подход</h4>
-                                <p>Каждая терапия адаптируется под ваши уникальные потребности и цели</p>
-                            </div>
-                        </div>
-                        
-                        <div class="approach-item">
-                            <div class="approach-icon">📈</div>
-                            <div class="approach-content">
-                                <h4>Доказательные методы</h4>
-                                <p>Использую только научно обоснованные техники с подтвержденной эффективностью</p>
-                            </div>
-                        </div>
-                        
-                        <div class="approach-item">
-                            <div class="approach-icon">🔒</div>
-                            <div class="approach-content">
-                                <h4>Полная конфиденциальность</h4>
-                                <p>Гарантирую абсолютную конфиденциальность всей информации</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="credentials">
-                        <div class="credential-item">
-                            <div class="credential-number">500+</div>
-                            <div class="credential-label">довольных клиентов</div>
-                        </div>
-                        <div class="credential-item">
-                            <div class="credential-number">8</div>
-                            <div class="credential-label">лет практики</div>
-                        </div>
-                        <div class="credential-item">
-                            <div class="credential-number">95%</div>
-                            <div class="credential-label">успешных случаев</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Отзывы -->
-    <section id="testimonials" class="testimonials-section">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-badge">Отзывы клиентов</div>
-                <h2 class="section-title">Истории изменений</h2>
-                <p class="section-subtitle">
-                    Реальные отзывы людей, которые нашли свой путь к психологическому благополучию
-                </p>
-            </div>
-            
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="testimonial-rating">
-                        <span>⭐⭐⭐⭐⭐</span>
-                    </div>
-                    <p class="testimonial-text">
-                        "Марина помогла мне справиться с паническими атаками. Онлайн формат оказался 
-                        очень удобным - я могла проходить терапию из дома, в комфортной обстановке."
+                <div>
+                    <h2 class="section-title">Моя миссия</h2>
+                    <p style="color: var(--text-light); margin-bottom: 1.5rem; line-height: 1.6;">
+                        Помогаю людям найти внутренний покой и гармонию с собой, развивать личностный потенциал и достигать поставленных целей. Использую доказательные методы психотерапии и коучинга для создания устойчивых позитивных изменений в жизни клиентов.
                     </p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">А</div>
-                        <div class="author-info">
-                            <div class="author-name">Анна К.</div>
-                            <div class="author-role">Клиент</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial-card featured">
-                    <div class="testimonial-rating">
-                        <span>⭐⭐⭐⭐⭐</span>
-                    </div>
-                    <p class="testimonial-text">
-                        "Семейная терапия онлайн спасла наш брак. Мы живем в разных городах, но смогли 
-                        работать с психологом вместе. Результат превзошел все ожидания!"
+
+                    <p style="color: var(--text-light); margin-bottom: 1.5rem; line-height: 1.6;">
+                        Специализируюсь на когнитивно-поведенческой терапии, работе с эмоциональными состояниями, семейной терапии и трансформационном коучинге. Мой подход основан на научных исследованиях и многолетнем практическом опыте.
                     </p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">М</div>
-                        <div class="author-info">
-                            <div class="author-name">Михаил и Елена</div>
-                            <div class="author-role">Семейная пара</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial-card">
-                    <div class="testimonial-rating">
-                        <span>⭐⭐⭐⭐⭐</span>
-                    </div>
-                    <p class="testimonial-text">
-                        "Арт-терапия онлайн - это что-то невероятное! Я научилась выражать свои эмоции 
-                        через творчество и нашла внутренний покой."
-                    </p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">В</div>
-                        <div class="author-info">
-                            <div class="author-name">Виктория П.</div>
-                            <div class="author-role">Клиент</div>
-                        </div>
+
+                    <div class="methods">
+                        <h4>Основные методы работы:</h4>
+                        <p>Интегральное нейропрограммирование, когнитивно-поведенческая терапия, гештальт терапия, психоанализ, арт-терапия, ДПДГ</p>
                     </div>
                 </div>
             </div>
@@ -351,97 +713,75 @@
     </section>
 
     <!-- Контакты -->
-    <section id="contact" class="contact-section">
-        <div class="section-container">
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Начните путь к изменениям</h2>
+                <p class="section-subtitle">Готова ответить на ваши вопросы и помочь сделать первый шаг к психологическому благополучию</p>
+            </div>
+
             <div class="contact-content">
                 <div class="contact-info">
-                    <div class="section-badge">Связь со мной</div>
-                    <h2 class="section-title">Начните путь к изменениям</h2>
-                    <p class="contact-description">
-                        Готова ответить на ваши вопросы и помочь сделать первый шаг к психологическому благополучию
-                    </p>
+                    <h3>Способы связи</h3>
                     
-                    <div class="contact-methods">
-                        <div class="contact-method">
-                            <div class="method-icon">📧</div>
-                            <div class="method-content">
-                                <h4>Email</h4>
-                                <a href="mailto:marina.psy1968@gmail.com">marina.psy1968@gmail.com</a>
-                            </div>
-                        </div>
-                        
-                        <div class="contact-method">
-                            <div class="method-icon">📱</div>
-                            <div class="method-content">
-                                <h4>Телефон / WhatsApp</h4>
-                                <a href="tel:+79197448522">+7 919 744 8522</a>
-                            </div>
-                        </div>
-                        
-                        <div class="contact-method">
-                            <div class="method-icon">🌐</div>
-                            <div class="method-content">
-                                <h4>Формат работы</h4>
-                                <span>Онлайн консультации через Zoom, Skype, WhatsApp</span>
-                            </div>
+                    <div class="contact-method">
+                        <div style="font-size: 1.5rem;">📧</div>
+                        <div>
+                            <strong>Email</strong><br>
+                            <a href="mailto:marina.psy1968@gmail.com" style="color: var(--primary);">marina.psy1968@gmail.com</a>
                         </div>
                     </div>
-                    
-                    <div class="contact-features">
-                        <div class="feature-item">
-                            <span class="feature-icon">⚡</span>
-                            <span>Быстрый ответ в течение 2 часов</span>
+
+                    <div class="contact-method">
+                        <div style="font-size: 1.5rem;">📱</div>
+                        <div>
+                            <strong>Телефон / WhatsApp</strong><br>
+                            <a href="tel:+79197448522" style="color: var(--primary);">+7 919 744 8522</a>
                         </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">🔒</span>
-                            <span>Полная конфиденциальность</span>
+                    </div>
+
+                    <div class="contact-method">
+                        <div style="font-size: 1.5rem;">🌐</div>
+                        <div>
+                            <strong>Формат работы</strong><br>
+                            Онлайн консультации через Zoom, Skype, WhatsApp
                         </div>
                     </div>
                 </div>
-                
-                <div class="contact-form-wrapper">
-                    <form class="contact-form" id="contact-form">
-                        <h3>Записаться на консультацию</h3>
-                        
+
+                <div class="contact-form">
+                    <h3>Записаться на консультацию</h3>
+                    <form id="contactForm">
                         <div class="form-group">
                             <label for="name">Ваше имя *</label>
                             <input type="text" id="name" name="name" required placeholder="Как к вам обращаться?">
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="phone">Телефон *</label>
                             <input type="tel" id="phone" name="phone" required placeholder="+7 (999) 123-45-67">
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="your@email.com">
-                        </div>
-                        
+
                         <div class="form-group">
                             <label for="service">Тип консультации</label>
                             <select id="service" name="service" required>
                                 <option value="">Выберите услугу</option>
-                                <option value="individual">Индивидуальная консультация</option>
-                                <option value="family">Семейная терапия</option>
-                                <option value="group">Групповые занятия</option>
-                                <option value="art">Арт-терапия</option>
-                                <option value="program1">Авторская программа "Я - хозяин своей судьбы!"</option>
-                                <option value="program2">Авторская программа "Я выбираю себя!"</option>
+                                <option value="individual">Индивидуальная консультация (50 мин / 3 500 ₽)</option>
+                                <option value="family">Семейная терапия (80 мин / 5 500 ₽)</option>
+                                <option value="art">Арт-терапия (50 мин / 3 500 ₽)</option>
+                                <option value="program1">Программа "Я - хозяин своей судьбы!" (6 сеансов / 18 000 ₽)</option>
+                                <option value="program2">Программа "Я выбираю себя!" (6 сеансов / 18 000 ₽)</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="message">Расскажите о вашей ситуации</label>
-                            <textarea id="message" name="message" rows="4" 
-                                placeholder="Кратко опишите, что вас беспокоит или какая помощь нужна..."></textarea>
+                            <textarea id="message" name="message" rows="4" placeholder="Кратко опишите, что вас беспокоит или какая помощь нужна..."></textarea>
                         </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-form">
-                            <span>📅 Отправить заявку</span>
-                        </button>
-                        
-                        <p class="form-note">
+
+                        <button type="submit" class="btn-submit">📅 Отправить заявку</button>
+
+                        <p style="font-size: 0.875rem; color: var(--text-light); margin-top: 1rem; text-align: center;">
                             * Нажимая кнопку, вы соглашаетесь на обработку персональных данных
                         </p>
                     </form>
@@ -452,50 +792,88 @@
 
     <!-- Футер -->
     <footer class="footer">
-        <div class="footer-container">
+        <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
+                <div>
                     <h4>Психология на каждый день!</h4>
                     <p>Современная психологическая помощь онлайн для вашего благополучия</p>
-                    <div class="footer-social">
-                        <a href="mailto:marina.psy1968@gmail.com" class="social-link">📧</a>
-                        <a href="tel:+79197448522" class="social-link">📱</a>
-                        <a href="https://wa.me/79197448522" class="social-link">💬</a>
-                    </div>
                 </div>
-                
-                <div class="footer-section">
+
+                <div>
                     <h4>Услуги</h4>
                     <ul class="footer-links">
-                        <li><a href="#services">Индивидуальные консультации</a></li>
-                        <li><a href="#services">Семейная терапия</a></li>
-                        <li><a href="#services">Групповые занятия</a></li>
+                        <li><a href="#pricing">Индивидуальные консультации (50 мин)</a></li>
+                        <li><a href="#pricing">Семейная терапия (80 мин)</a></li>
                         <li><a href="#services">Арт-терапия</a></li>
                         <li><a href="#services">"Я - хозяин своей судьбы!"</a></li>
                         <li><a href="#services">"Я выбираю себя!"</a></li>
                     </ul>
                 </div>
-                
-                <div class="footer-section">
+
+                <div>
                     <h4>Контакты</h4>
-                    <ul class="footer-contacts">
-                        <li>📧 marina.psy1968@gmail.com</li>
-                        <li>📱 +7 919 744 8522</li>
-                        <li>🌐 Онлайн консультации по всему миру</li>
-                    </ul>
+                    <div style="color: rgba(255,255,255,0.7);">
+                        <div>📧 marina.psy1968@gmail.com</div>
+                        <div>📱 +7 919 744 8522</div>
+                        <div>🌐 Онлайн консультации по всему миру</div>
+                    </div>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
                 <p>&copy; 2025 Психология на каждый день! - Марина Чикаидзе. Все права защищены.</p>
-                <div class="footer-status">
-                    <span id="api-status">🟢 Система работает</span>
-                </div>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript -->
-    <script src="src/index.js" type="module"></script>
+    <script>
+        // Плавная прокрутка
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Обработка формы
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            const message = `Заявка с сайта "Психология на каждый день!"
+
+👤 Имя: ${data.name}
+📱 Телефон: ${data.phone}
+🎯 Услуга: ${data.service}
+💬 Сообщение: ${data.message || 'Не указано'}`;
+
+            const whatsappUrl = `https://wa.me/79197448522?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            alert('Спасибо за заявку! Вы будете перенаправлены в WhatsApp для завершения записи.');
+        });
+
+        // Анимации при прокрутке
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.price-card, .service-card, .contact-method').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html> 
