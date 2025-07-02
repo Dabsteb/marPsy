@@ -138,6 +138,183 @@ app.get('/api/status', (req, res) => {
     });
 });
 
+// Health check endpoint для frontend
+app.get('/api/health', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Psychology Cabinet API is running',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
+// Contact form submission endpoint
+app.post('/api/contact', async (req, res) => {
+    try {
+        const { name, phone, email, service, message } = req.body;
+        
+        // Validation
+        if (!name || !phone || !service) {
+            return res.status(400).json({
+                success: false,
+                message: 'Обязательные поля: имя, телефон, тип консультации'
+            });
+        }
+
+        // Phone validation (simple)
+        const phoneRegex = /^(\+7|8)?[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$/;
+        if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
+            return res.status(400).json({
+                success: false,
+                message: 'Неверный формат номера телефона'
+            });
+        }
+
+        // Email validation (if provided)
+        if (email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Неверный формат email'
+                });
+            }
+        }
+
+        // Create contact record
+        const contactData = {
+            name: name.trim(),
+            phone: phone.trim(),
+            email: email ? email.trim() : null,
+            service,
+            message: message ? message.trim() : null,
+            status: 'new',
+            createdAt: new Date(),
+            ip: req.ip || req.connection.remoteAddress,
+            userAgent: req.get('User-Agent')
+        };
+
+        // Save to database using Mongoose
+        try {
+            const Contact = require('./models/Contact');
+            const savedContact = await Contact.create(contactData);
+            
+            console.log('📧 Новая заявка сохранена:', {
+                id: savedContact._id,
+                name: contactData.name,
+                phone: contactData.phone,
+                service: contactData.service
+            });
+
+            // Send notifications
+            await sendNotificationEmail(contactData);
+            sendWebSocketNotification(app.locals.wsServer, contactData);
+
+        } catch (dbError) {
+            console.error('Database error:', dbError);
+            // Continue without database if it fails
+        }
+
+        res.json({
+            success: true,
+            message: 'Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.',
+            data: {
+                timestamp: contactData.createdAt,
+                whatsappUrl: generateWhatsAppUrl(contactData)
+            }
+        });
+
+    } catch (error) {
+        console.error('Contact form error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Произошла ошибка при отправке заявки. Попробуйте еще раз или свяжитесь с нами напрямую.'
+        });
+    }
+});
+
+// Get contacts statistics for admin
+app.get('/api/contacts/stats', async (req, res) => {
+    try {
+        const Contact = require('./models/Contact');
+        
+        const stats = await Contact.aggregate([
+            {
+                $group: {
+                    _id: '$status',
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+
+        const total = await Contact.countDocuments();
+        const today = await Contact.countDocuments({
+            createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) }
+        });
+
+        res.json({
+            success: true,
+            data: {
+                total,
+                today,
+                byStatus: stats.reduce((acc, item) => {
+                    acc[item._id] = item.count;
+                    return acc;
+                }, {})
+            }
+        });
+
+    } catch (error) {
+        console.error('Stats error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка получения статистики'
+        });
+    }
+});
+
+// Helper functions
+async function sendNotificationEmail(contactData) {
+    // Log notification (implement email service later)
+    console.log('📧 Email уведомление:', {
+        to: 'marina.psy1968@gmail.com',
+        subject: `Новая заявка от ${contactData.name}`,
+        text: `
+Имя: ${contactData.name}
+Телефон: ${contactData.phone}
+Email: ${contactData.email || 'не указан'}
+Услуга: ${contactData.service}
+Сообщение: ${contactData.message || 'не указано'}
+Время: ${contactData.createdAt.toLocaleString('ru-RU')}
+        `.trim()
+    });
+}
+
+function sendWebSocketNotification(wsServer, contactData) {
+    if (wsServer) {
+        wsServer.broadcast({
+            type: 'new_contact',
+            data: {
+                name: contactData.name,
+                service: contactData.service,
+                timestamp: contactData.createdAt
+            }
+        });
+    }
+}
+
+function generateWhatsAppUrl(contactData) {
+    const phone = '79197448522'; // Marina's phone
+    const message = `Новая заявка с сайта:
+Имя: ${contactData.name}
+Телефон: ${contactData.phone}
+Email: ${contactData.email || 'не указан'}
+Услуга: ${contactData.service}
+${contactData.message ? `Сообщение: ${contactData.message}` : ''}`;
+    
+    return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+}
+
 // Health check для Railway
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../../frontend/main-site/public/index.html'));

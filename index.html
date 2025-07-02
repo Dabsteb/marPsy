@@ -3,893 +3,499 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧠 Психологический кабинет v2.0 - Режим разработчика</title>
-    <meta name="description" content="Персональный психологический кабинет - современный подход к психологической помощи">
-    <meta name="keywords" content="психология, психолог, консультации, психологическая помощь">
+    <title>🧠 Психология на каждый день! | Марина Чикаидзе - Магистр психологии</title>
+    <meta name="description" content="Психология на каждый день! Профессиональная психологическая помощь онлайн от магистра психологических наук. Интегральное нейропрограммирование, когнитивно-поведенческая терапия, гештальт терапия, психоанализ, арт-терапия, ДПДГ.">
+    <meta name="keywords" content="психолог онлайн, психология на каждый день, магистр психологии, психологические консультации, ДПДГ, гештальт терапия">
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
     
-    <!-- Preload Google Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <style>
-        /* ===== СОВРЕМЕННЫЕ СТИЛИ 2025 ===== */
-        
-        /* Сброс и базовые стили */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        :root {
-            /* Цветовая палитра 2025 - Mocha Mousse и современные акценты */
-            --primary-color: #6B4E3D;
-            --primary-light: #8B6F5F;
-            --secondary-color: #E4A853;
-            --accent-color: #FF6B35;
-            --gradient-start: #667eea;
-            --gradient-end: #764ba2;
-            --text-primary: #2C3E50;
-            --text-secondary: #7F8C8D;
-            --text-light: #BDC3C7;
-            --background: #FFFFFF;
-            --background-alt: #F8F9FA;
-            --surface: #FFFFFF;
-            --border: #E1E5E9;
-            --shadow: rgba(0, 0, 0, 0.1);
-            --shadow-lg: rgba(0, 0, 0, 0.15);
-            
-            /* Типография */
-            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            --font-display: 'Space Grotesk', 'Inter', sans-serif;
-            
-            /* Размеры */
-            --border-radius: 12px;
-            --border-radius-lg: 20px;
-            --spacing-xs: 0.25rem;
-            --spacing-sm: 0.5rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 1.5rem;
-            --spacing-xl: 2rem;
-            --spacing-2xl: 3rem;
-            --spacing-3xl: 4rem;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
-        }
-        
-        body {
-            font-family: var(--font-primary);
-            line-height: 1.6;
-            color: var(--text-primary);
-            background: var(--background);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden;
-        }
-        
-        /* Макротипографика - тренд 2025 */
-        .hero-title {
-            font-family: var(--font-display);
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: var(--spacing-lg);
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .section-title {
-            font-family: var(--font-display);
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 600;
-            margin-bottom: var(--spacing-xl);
-            text-align: center;
-        }
-        
-        /* Контейнеры */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 var(--spacing-lg);
-        }
-        
-        /* Навигация с неоморфизмом */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 1000;
-            padding: var(--spacing-md) 0;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-        
-        .nav-menu {
-            display: flex;
-            gap: var(--spacing-xl);
-            list-style: none;
-        }
-        
-        .nav-link {
-            text-decoration: none;
-            color: var(--text-primary);
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-            padding: var(--spacing-sm) var(--spacing-md);
-            border-radius: var(--border-radius);
-        }
-        
-        .nav-link:hover {
-            color: var(--primary-color);
-            background: rgba(107, 78, 61, 0.1);
-        }
-        
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            background: none;
-            border: none;
-            cursor: pointer;
-            gap: 4px;
-        }
-        
-        .nav-toggle span {
-            width: 25px;
-            height: 3px;
-            background: var(--text-primary);
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-        
-        /* Hero секция с градиентами 2025 */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='m0 40l40-40h-40v40zm0 0h40l-40 40v-40z'/%3E%3C/g%3E%3C/svg%3E");
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            color: white;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .hero-subtitle {
-            font-size: 1.25rem;
-            margin-bottom: var(--spacing-2xl);
-            opacity: 0.9;
-            font-weight: 400;
-        }
-        
-        .hero-actions {
-            display: flex;
-            gap: var(--spacing-lg);
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        /* Кнопки с микроанимациями */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-md) var(--spacing-xl);
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
-        
-        .btn-primary {
-            background: var(--accent-color);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
-        }
-        
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-        }
-        
-        /* Секции */
-        .section {
-            padding: var(--spacing-3xl) 0;
-        }
-        
-        .section-alt {
-            background: var(--background-alt);
-        }
-        
-        /* Карточки услуг с 3D эффектами */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: var(--spacing-xl);
-            margin-top: var(--spacing-2xl);
-        }
-        
-        .service-card {
-            background: var(--surface);
-            padding: var(--spacing-2xl);
-            border-radius: var(--border-radius-lg);
-            box-shadow: 0 4px 20px var(--shadow);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        }
-        
-        .service-card:hover {
-            transform: translateY(-8px) rotateX(5deg);
-            box-shadow: 0 15px 40px var(--shadow-lg);
-        }
-        
-        .service-icon {
-            font-size: 3rem;
-            margin-bottom: var(--spacing-lg);
-            display: block;
-        }
-        
-        .service-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: var(--spacing-md);
-            color: var(--primary-color);
-        }
-        
-        .service-description {
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-lg);
-            line-height: 1.7;
-        }
-        
-        /* Контактная форма */
-        .contact-section {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-            color: white;
-        }
-        
-        .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-3xl);
-            align-items: center;
-        }
-        
-        .contact-info h3 {
-            margin-bottom: var(--spacing-lg);
-            font-size: 2rem;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-            font-size: 1.1rem;
-        }
-        
-        .contact-form {
-            background: rgba(255, 255, 255, 0.1);
-            padding: var(--spacing-2xl);
-            border-radius: var(--border-radius-lg);
-            backdrop-filter: blur(10px);
-        }
-        
-        .form-group {
-            margin-bottom: var(--spacing-lg);
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: var(--spacing-sm);
-            font-weight: 500;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: var(--border-radius);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(228, 168, 83, 0.3);
-        }
-        
-        /* Футер */
-        .footer {
-            background: var(--text-primary);
-            color: white;
-            padding: var(--spacing-2xl) 0;
-            text-align: center;
-        }
-        
-        /* Статус разработчика */
-        .dev-status {
-            position: fixed;
-            bottom: var(--spacing-lg);
-            right: var(--spacing-lg);
-            background: var(--accent-color);
-            color: white;
-            padding: var(--spacing-sm) var(--spacing-md);
-            border-radius: var(--border-radius);
-            font-size: 0.875rem;
-            font-weight: 500;
-            z-index: 1001;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        
-        /* Анимации */
-        .fade-in {
-            animation: fadeIn 0.8s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .slide-up {
-            animation: slideUp 0.6s ease-out;
-        }
-        
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                top: 80px;
-                left: 0;
-                right: 0;
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                padding: var(--spacing-xl);
-                transform: translateY(-100%);
-                opacity: 0;
-                visibility: hidden;
-                transition: all 0.3s ease;
-            }
-            
-            .nav-menu.active {
-                transform: translateY(0);
-                opacity: 1;
-                visibility: visible;
-            }
-            
-            .nav-toggle {
-                display: flex;
-            }
-            
-            .hero-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .contact-content {
-                grid-template-columns: 1fr;
-                gap: var(--spacing-xl);
-            }
-            
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Эффекты прокрутки */
-        .scroll-reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.6s ease;
-        }
-        
-        .scroll-reveal.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+    <!-- Styles -->
+    <link rel="stylesheet" href="src/styles/global.css">
 </head>
 <body>
-    <!-- Статус разработчика -->
-    <div class="dev-status">
-        🔧 DEV MODE
-    </div>
-    
     <!-- Навигация -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-content">
-                <a href="#" class="logo">
-                    🧠 Психологический кабинет
-                </a>
-                <ul class="nav-menu" id="navMenu">
-                    <li><a href="#home" class="nav-link">Главная</a></li>
-                    <li><a href="#services" class="nav-link">Услуги</a></li>
-                    <li><a href="#about" class="nav-link">О нас</a></li>
-                    <li><a href="#contact" class="nav-link">Контакты</a></li>
-                </ul>
-                <button class="nav-toggle" id="navToggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">
+                🧠 <span>Психология на каждый день!</span>
+            </a>
+            
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home" class="nav-link">Главная</a></li>
+                <li><a href="#services" class="nav-link">Услуги</a></li>
+                <li><a href="#about" class="nav-link">О психологе</a></li>
+                <li><a href="#testimonials" class="nav-link">Отзывы</a></li>
+                <li><a href="#contact" class="nav-link nav-cta">Записаться</a></li>
+            </ul>
+            
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
     </nav>
-    
+
     <!-- Hero секция -->
     <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-content fade-in">
-                <h1 class="hero-title">Путь к внутренней гармонии</h1>
-                <p class="hero-subtitle">Профессиональная психологическая помощь в современном формате. Найдите баланс, откройте новые возможности, измените жизнь к лучшему.</p>
+        <div class="hero-bg">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+        </div>
+        
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">✨ Психология на каждый день! 2025</div>
+                <h1 class="hero-title">
+                    Найдите внутренний<br>
+                    <span class="gradient-text">покой и гармонию с собой</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Профессиональная психологическая помощь от магистра психологических наук с 8-летним опытом. 
+                    Интегральное нейропрограммирование, когнитивно-поведенческая терапия, гештальт терапия, психоанализ, арт-терапия, ДПДГ 
+                    и доказательные методы для достижения внутренней гармонии и личностного роста.
+                </p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">довольных клиентов</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">лет практики</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">положительных результатов</div>
+                    </div>
+                </div>
+                
                 <div class="hero-actions">
                     <a href="#contact" class="btn btn-primary">
-                        📅 Записаться на консультацию
+                        <span>📅 Записаться на сессию</span>
                     </a>
-                    <a href="#services" class="btn btn-secondary">
-                        💡 Узнать больше
+                    <a href="#about" class="btn btn-secondary">
+                        <span>💡 Узнать больше</span>
                     </a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="therapy-illustration">
+                    <div class="illustration-bg"></div>
+                    <div class="illustration-elements">
+                        <div class="element element-brain">🧠</div>
+                        <div class="element element-heart">💚</div>
+                        <div class="element element-peace">☮️</div>
+                        <div class="element element-growth">🌱</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Услуги -->
-    <section id="services" class="section">
-        <div class="container">
-            <h2 class="section-title scroll-reveal">Наши услуги</h2>
+    <section id="services" class="services-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-badge">Наши услуги</div>
+                <h2 class="section-title">Комплексная психологическая помощь</h2>
+                <p class="section-subtitle">
+                    Современные методы терапии для решения различных жизненных задач
+                </p>
+            </div>
+            
             <div class="services-grid">
-                <div class="service-card scroll-reveal">
-                    <span class="service-icon">👤</span>
-                    <h3 class="service-title">Индивидуальные консультации</h3>
-                    <p class="service-description">Персональный подход к решению ваших психологических задач. Работаем с тревожностью, депрессией, стрессом и другими вопросами.</p>
-                    <a href="#contact" class="btn btn-primary">Записаться</a>
+                <div class="service-card featured">
+                    <div class="service-icon">👤</div>
+                    <h3 class="service-title">Индивидуальные онлайн консультации</h3>
+                    <p class="service-description">
+                        Персональный подход к решению ваших психологических задач. 
+                        Работаем с тревожностью, депрессией, стрессом через видеосвязь.
+                    </p>
+                    <div class="service-features">
+                        <span class="feature">✓ Комфорт дома</span>
+                        <span class="feature">✓ Гибкое расписание</span>
+                        <span class="feature">✓ Полная конфиденциальность</span>
+                    </div>
+                    <div class="service-price">от 3 000 ₽ / сессия</div>
+                    <a href="#contact" class="btn btn-primary btn-service">Записаться</a>
                 </div>
                 
-                <div class="service-card scroll-reveal">
-                    <span class="service-icon">👨‍👩‍👧‍👦</span>
-                    <h3 class="service-title">Семейная терапия</h3>
-                    <p class="service-description">Восстановление гармонии в отношениях. Работа с конфликтами, улучшение коммуникации, укрепление семейных связей.</p>
-                    <a href="#contact" class="btn btn-primary">Записаться</a>
+                <div class="service-card">
+                    <div class="service-icon">👨‍👩‍👧‍👦</div>
+                    <h3 class="service-title">Семейная терапия онлайн</h3>
+                    <p class="service-description">
+                        Восстановление гармонии в отношениях через видеосвязь. 
+                        Работа с конфликтами, улучшение коммуникации.
+                    </p>
+                    <div class="service-price">от 4 500 ₽ / сессия</div>
+                    <a href="#contact" class="btn btn-outline btn-service">Записаться</a>
                 </div>
                 
-                <div class="service-card scroll-reveal">
-                    <span class="service-icon">👥</span>
-                    <h3 class="service-title">Групповые занятия</h3>
-                    <p class="service-description">Работа в группе единомышленников. Поддержка, обмен опытом и совместное решение схожих проблем.</p>
-                    <a href="#contact" class="btn btn-primary">Записаться</a>
+                <div class="service-card">
+                    <div class="service-icon">👥</div>
+                    <h3 class="service-title">Групповые онлайн занятия</h3>
+                    <p class="service-description">
+                        Работа в группе единомышленников. Поддержка, обмен опытом 
+                        и совместное решение схожих проблем.
+                    </p>
+                    <div class="service-price">от 2 000 ₽ / сессия</div>
+                    <a href="#contact" class="btn btn-outline btn-service">Записаться</a>
                 </div>
                 
-                <div class="service-card scroll-reveal">
-                    <span class="service-icon">💻</span>
-                    <h3 class="service-title">Онлайн консультации</h3>
-                    <p class="service-description">Удобный формат для тех, кто ценит комфорт. Профессиональная помощь из любой точки мира.</p>
-                    <a href="#contact" class="btn btn-primary">Записаться</a>
+                <div class="service-card">
+                    <div class="service-icon">🎨</div>
+                    <h3 class="service-title">Арт-терапия онлайн</h3>
+                    <p class="service-description">
+                        Творческий подход к решению внутренних конфликтов. 
+                        Исцеление через искусство и самовыражение.
+                    </p>
+                    <div class="service-price">от 3 500 ₽ / сессия</div>
+                    <a href="#contact" class="btn btn-outline btn-service">Записаться</a>
                 </div>
                 
-                <div class="service-card scroll-reveal">
-                    <span class="service-icon">🧘‍♀️</span>
-                    <h3 class="service-title">Арт-терапия</h3>
-                    <p class="service-description">Творческий подход к решению внутренних конфликтов. Исцеление через искусство и самовыражение.</p>
-                    <a href="#contact" class="btn btn-primary">Записаться</a>
+                <div class="service-card">
+                    <div class="service-icon">🌟</div>
+                    <h3 class="service-title">Авторская программа "Я - хозяин своей судьбы!"</h3>
+                    <p class="service-description">
+                        Комплексная программа по развитию личностной силы, самоопределению 
+                        и принятию ответственности за свою жизнь.
+                    </p>
+                    <div class="service-price">от 5 000 ₽ / программа</div>
+                    <a href="#contact" class="btn btn-outline btn-service">Записаться</a>
                 </div>
                 
-                <div class="service-card scroll-reveal">
-                    <span class="service-icon">📚</span>
-                    <h3 class="service-title">Психологические тренинги</h3>
-                    <p class="service-description">Развитие личностных навыков, повышение самооценки, работа с эмоциональным интеллектом.</p>
-                    <a href="#contact" class="btn btn-primary">Записаться</a>
+                <div class="service-card">
+                    <div class="service-icon">💫</div>
+                    <h3 class="service-title">Авторская программа "Я выбираю себя!"</h3>
+                    <p class="service-description">
+                        Трансформационная программа для повышения самооценки, 
+                        принятия себя и построения здоровых границ.
+                    </p>
+                    <div class="service-price">от 5 000 ₽ / программа</div>
+                    <a href="#contact" class="btn btn-outline btn-service">Записаться</a>
                 </div>
             </div>
         </div>
     </section>
-    
-    <!-- О нас -->
-    <section id="about" class="section section-alt">
-        <div class="container">
-            <h2 class="section-title scroll-reveal">О нашем кабинете</h2>
-            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 2rem;" class="scroll-reveal">
-                    Мы создали пространство, где каждый может найти поддержку и понимание. Наш подход основан на современных методах психотерапии, индивидуальном подходе и создании атмосферы доверия.
-                </p>
-                <p style="font-size: 1.1rem; line-height: 1.7; color: var(--text-secondary);" class="scroll-reveal">
-                    Работаем с 2018 года, помогли более чем 500 клиентам найти путь к внутренней гармонии. Используем проверенные методики и постоянно развиваемся в профессиональном плане.
-                </p>
+
+    <!-- О психологе -->
+    <section id="about" class="about-section">
+        <div class="section-container">
+            <div class="about-content">
+                <div class="about-visual">
+                    <div class="psychologist-card">
+                        <div class="card-image">
+                            <div class="avatar-placeholder">👩‍⚕️</div>
+                            <div class="online-indicator">
+                                <span class="status-dot"></span>
+                                <span>Онлайн</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3>Марина Чикаидзе</h3>
+                            <p>Магистр психологии</p>
+                            <div class="credentials-mini">
+                                <span>8 лет опыта</span>
+                                <span>500+ клиентов</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-text">
+                    <div class="section-badge">О специалисте</div>
+                    <h2 class="section-title">Моя миссия</h2>
+                    
+                    <p class="about-description">
+                        Помогаю людям найти внутренний покой и гармонию с собой, развивать личностный 
+                        потенциал и достигать поставленных целей. Использую доказательные методы 
+                        психотерапии и коучинга для создания устойчивых позитивных изменений в жизни 
+                        клиентов.
+                    </p>
+                    
+                    <p class="about-description">
+                        Специализируюсь на когнитивно-поведенческой терапии, работе с эмоциональными 
+                        состояниями, семейной терапии и трансформационном коучинге. Мой подход 
+                        основан на научных исследованиях и многолетнем практическом опыте.
+                    </p>
+                    
+                    <div class="methods-section">
+                        <h4>Основные методы работы:</h4>
+                        <p class="methods-list">
+                            Интегральное нейропрограммирование, когнитивно-поведенческая терапия, 
+                            гештальт терапия, психоанализ, арт-терапия, ДПДГ
+                        </p>
+                    </div>
+                    
+                    <div class="approach-cards">
+                        <div class="approach-item">
+                            <div class="approach-icon">🎯</div>
+                            <div class="approach-content">
+                                <h4>Индивидуальный подход</h4>
+                                <p>Каждая терапия адаптируется под ваши уникальные потребности и цели</p>
+                            </div>
+                        </div>
+                        
+                        <div class="approach-item">
+                            <div class="approach-icon">📈</div>
+                            <div class="approach-content">
+                                <h4>Доказательные методы</h4>
+                                <p>Использую только научно обоснованные техники с подтвержденной эффективностью</p>
+                            </div>
+                        </div>
+                        
+                        <div class="approach-item">
+                            <div class="approach-icon">🔒</div>
+                            <div class="approach-content">
+                                <h4>Полная конфиденциальность</h4>
+                                <p>Гарантирую абсолютную конфиденциальность всей информации</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="credentials">
+                        <div class="credential-item">
+                            <div class="credential-number">500+</div>
+                            <div class="credential-label">довольных клиентов</div>
+                        </div>
+                        <div class="credential-item">
+                            <div class="credential-number">8</div>
+                            <div class="credential-label">лет практики</div>
+                        </div>
+                        <div class="credential-item">
+                            <div class="credential-number">95%</div>
+                            <div class="credential-label">успешных случаев</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-    
+
+    <!-- Отзывы -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-badge">Отзывы клиентов</div>
+                <h2 class="section-title">Истории изменений</h2>
+                <p class="section-subtitle">
+                    Реальные отзывы людей, которые нашли свой путь к психологическому благополучию
+                </p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <span>⭐⭐⭐⭐⭐</span>
+                    </div>
+                    <p class="testimonial-text">
+                        "Марина помогла мне справиться с паническими атаками. Онлайн формат оказался 
+                        очень удобным - я могла проходить терапию из дома, в комфортной обстановке."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">А</div>
+                        <div class="author-info">
+                            <div class="author-name">Анна К.</div>
+                            <div class="author-role">Клиент</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card featured">
+                    <div class="testimonial-rating">
+                        <span>⭐⭐⭐⭐⭐</span>
+                    </div>
+                    <p class="testimonial-text">
+                        "Семейная терапия онлайн спасла наш брак. Мы живем в разных городах, но смогли 
+                        работать с психологом вместе. Результат превзошел все ожидания!"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">М</div>
+                        <div class="author-info">
+                            <div class="author-name">Михаил и Елена</div>
+                            <div class="author-role">Семейная пара</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <span>⭐⭐⭐⭐⭐</span>
+                    </div>
+                    <p class="testimonial-text">
+                        "Арт-терапия онлайн - это что-то невероятное! Я научилась выражать свои эмоции 
+                        через творчество и нашла внутренний покой."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">В</div>
+                        <div class="author-info">
+                            <div class="author-name">Виктория П.</div>
+                            <div class="author-role">Клиент</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Контакты -->
-    <section id="contact" class="section contact-section">
-        <div class="container">
-            <h2 class="section-title" style="color: white;">Свяжитесь с нами</h2>
+    <section id="contact" class="contact-section">
+        <div class="section-container">
             <div class="contact-content">
-                <div class="contact-info scroll-reveal">
-                    <h3>Как нас найти</h3>
-                    <div class="contact-item">
-                        <span>📍</span>
-                        <span>г. Москва, ул. Психологическая, д. 42</span>
+                <div class="contact-info">
+                    <div class="section-badge">Связь со мной</div>
+                    <h2 class="section-title">Начните путь к изменениям</h2>
+                    <p class="contact-description">
+                        Готова ответить на ваши вопросы и помочь сделать первый шаг к психологическому благополучию
+                    </p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <div class="method-icon">📧</div>
+                            <div class="method-content">
+                                <h4>Email</h4>
+                                <a href="mailto:marina.psy1968@gmail.com">marina.psy1968@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="method-icon">📱</div>
+                            <div class="method-content">
+                                <h4>Телефон / WhatsApp</h4>
+                                <a href="tel:+79197448522">+7 919 744 8522</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="method-icon">🌐</div>
+                            <div class="method-content">
+                                <h4>Формат работы</h4>
+                                <span>Онлайн консультации через Zoom, Skype, WhatsApp</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="contact-item">
-                        <span>📞</span>
-                        <span>+7 (999) 123-45-67</span>
-                    </div>
-                    <div class="contact-item">
-                        <span>📧</span>
-                        <span>info@psychology-cabinet.ru</span>
-                    </div>
-                    <div class="contact-item">
-                        <span>🕒</span>
-                        <span>Ежедневно с 9:00 до 21:00</span>
+                    
+                    <div class="contact-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">⚡</span>
+                            <span>Быстрый ответ в течение 2 часов</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🔒</span>
+                            <span>Полная конфиденциальность</span>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="contact-form scroll-reveal">
-                    <h3 style="margin-bottom: 1.5rem;">Записаться на консультацию</h3>
-                    <form id="contactForm">
+                <div class="contact-form-wrapper">
+                    <form class="contact-form" id="contact-form">
+                        <h3>Записаться на консультацию</h3>
+                        
                         <div class="form-group">
-                            <label class="form-label">Ваше имя</label>
-                            <input type="text" class="form-control" placeholder="Как к вам обращаться?" required>
+                            <label for="name">Ваше имя *</label>
+                            <input type="text" id="name" name="name" required placeholder="Как к вам обращаться?">
                         </div>
+                        
                         <div class="form-group">
-                            <label class="form-label">Телефон</label>
-                            <input type="tel" class="form-control" placeholder="+7 (999) 123-45-67" required>
+                            <label for="phone">Телефон *</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="+7 (999) 123-45-67">
                         </div>
+                        
                         <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" placeholder="your@email.com" required>
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com">
                         </div>
+                        
                         <div class="form-group">
-                            <label class="form-label">Сообщение</label>
-                            <textarea class="form-control" rows="4" placeholder="Расскажите, что вас беспокоит..." required></textarea>
+                            <label for="service">Тип консультации</label>
+                            <select id="service" name="service" required>
+                                <option value="">Выберите услугу</option>
+                                <option value="individual">Индивидуальная консультация</option>
+                                <option value="family">Семейная терапия</option>
+                                <option value="group">Групповые занятия</option>
+                                <option value="art">Арт-терапия</option>
+                                <option value="program1">Авторская программа "Я - хозяин своей судьбы!"</option>
+                                <option value="program2">Авторская программа "Я выбираю себя!"</option>
+                            </select>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">
-                            ✉️ Отправить заявку
+                        
+                        <div class="form-group">
+                            <label for="message">Расскажите о вашей ситуации</label>
+                            <textarea id="message" name="message" rows="4" 
+                                placeholder="Кратко опишите, что вас беспокоит или какая помощь нужна..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-form">
+                            <span>📅 Отправить заявку</span>
                         </button>
+                        
+                        <p class="form-note">
+                            * Нажимая кнопку, вы соглашаетесь на обработку персональных данных
+                        </p>
                     </form>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Футер -->
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Психологический кабинет v2.0. Все права защищены.</p>
-            <p style="margin-top: 0.5rem; opacity: 0.7;">Создано с ❤️ для вашего благополучия</p>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Психология на каждый день!</h4>
+                    <p>Современная психологическая помощь онлайн для вашего благополучия</p>
+                    <div class="footer-social">
+                        <a href="mailto:marina.psy1968@gmail.com" class="social-link">📧</a>
+                        <a href="tel:+79197448522" class="social-link">📱</a>
+                        <a href="https://wa.me/79197448522" class="social-link">💬</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Услуги</h4>
+                    <ul class="footer-links">
+                        <li><a href="#services">Индивидуальные консультации</a></li>
+                        <li><a href="#services">Семейная терапия</a></li>
+                        <li><a href="#services">Групповые занятия</a></li>
+                        <li><a href="#services">Арт-терапия</a></li>
+                        <li><a href="#services">"Я - хозяин своей судьбы!"</a></li>
+                        <li><a href="#services">"Я выбираю себя!"</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <ul class="footer-contacts">
+                        <li>📧 marina.psy1968@gmail.com</li>
+                        <li>📱 +7 919 744 8522</li>
+                        <li>🌐 Онлайн консультации по всему миру</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Психология на каждый день! - Марина Чикаидзе. Все права защищены.</p>
+                <div class="footer-status">
+                    <span id="api-status">🟢 Система работает</span>
+                </div>
+            </div>
         </div>
     </footer>
-    
-    <script>
-        // ===== СОВРЕМЕННЫЙ JAVASCRIPT 2025 =====
-        
-        // Конфигурация приложения
-        const APP_CONFIG = {
-            name: 'Психологический кабинет',
-            version: '2.0 DEV',
-            mode: 'development'
-        };
-        
-        // Инициализация приложения
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log(`🚀 ${APP_CONFIG.name} v${APP_CONFIG.version} запущен в режиме разработчика`);
-            
-            initNavigation();
-            initScrollEffects();
-            initFormHandling();
-            addMicroInteractions();
-            
-            console.log('✅ Все системы инициализированы');
-        });
-        
-        // Навигация
-        function initNavigation() {
-            const navToggle = document.getElementById('navToggle');
-            const navMenu = document.getElementById('navMenu');
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            // Мобильное меню
-            navToggle?.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-                navToggle.classList.toggle('active');
-            });
-            
-            // Плавная прокрутка
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('href').substring(1);
-                    const targetSection = document.getElementById(targetId);
-                    
-                    if (targetSection) {
-                        const offsetTop = targetSection.offsetTop - 80;
-                        
-                        window.scrollTo({
-                            top: offsetTop,
-                            behavior: 'smooth'
-                        });
-                        
-                        // Закрываем мобильное меню
-                        navMenu.classList.remove('active');
-                        navToggle.classList.remove('active');
-                    }
-                });
-            });
-            
-            // Обновление активной ссылки при прокрутке
-            window.addEventListener('scroll', updateActiveLink);
-        }
-        
-        function updateActiveLink() {
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop - 100;
-                if (scrollY >= sectionTop) {
-                    current = section.getAttribute('id');
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        }
-        
-        // Эффекты прокрутки
-        function initScrollEffects() {
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('revealed');
-                    }
-                });
-            }, observerOptions);
-            
-            // Наблюдаем за элементами с классом scroll-reveal
-            document.querySelectorAll('.scroll-reveal').forEach(el => {
-                observer.observe(el);
-            });
-            
-            // Эффект параллакса для навбара
-            window.addEventListener('scroll', () => {
-                const navbar = document.querySelector('.navbar');
-                if (window.scrollY > 50) {
-                    navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-                    navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-                } else {
-                    navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-                    navbar.style.boxShadow = 'none';
-                }
-            });
-        }
-        
-        // Обработка формы
-        function initFormHandling() {
-            const contactForm = document.getElementById('contactForm');
-            
-            contactForm?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                // Получаем данные формы
-                const formData = new FormData(contactForm);
-                const data = {};
-                formData.forEach((value, key) => {
-                    data[key] = value;
-                });
-                
-                console.log('📧 Отправка формы:', data);
-                
-                // Показываем уведомление
-                showNotification('Спасибо за заявку! Мы свяжемся с вами в ближайшее время.', 'success');
-                
-                // Очищаем форму
-                contactForm.reset();
-            });
-        }
-        
-        // Микроанимации
-        function addMicroInteractions() {
-            // Анимация кнопок при наведении
-            document.querySelectorAll('.btn').forEach(btn => {
-                btn.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px)';
-                });
-                
-                btn.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
-            
-            // Анимация карточек
-            document.querySelectorAll('.service-card').forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-8px) rotateX(5deg)';
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) rotateX(0deg)';
-                });
-            });
-        }
-        
-        // Система уведомлений
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: ${type === 'success' ? '#28a745' : '#007bff'};
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 8px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-                z-index: 1002;
-                transform: translateX(400px);
-                transition: transform 0.3s ease;
-            `;
-            
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            // Показываем уведомление
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            // Скрываем через 3 секунды
-            setTimeout(() => {
-                notification.style.transform = 'translateX(400px)';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-        
-        // Дополнительные эффекты для DEV режима
-        console.log(`
-🔧 РЕЖИМ РАЗРАБОТЧИКА АКТИВЕН
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ Все стили встроены
-✅ JavaScript загружен
-✅ Микроанимации работают
-✅ Адаптивный дизайн
-✅ Современные тренды 2025
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        `);
-    </script>
+
+    <!-- JavaScript -->
+    <script src="src/index.js" type="module"></script>
 </body>
 </html> 

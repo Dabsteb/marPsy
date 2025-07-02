@@ -1,371 +1,419 @@
 // Импорт стилей
 import './styles/global.css';
 
-// Конфигурация приложения
-const APP_CONFIG = {
-    name: 'Психологический кабинет',
-    version: '2.0',
-    apiUrl: process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3000/api'
-};
+// Современный JavaScript для психологического кабинета 2025
 
-// Основная функция инициализации
-function initApp() {
-    console.log(`🚀 ${APP_CONFIG.name} v${APP_CONFIG.version} запущен`);
-    console.log(`🌐 API URL: ${APP_CONFIG.apiUrl}`);
-    
-    // Скрываем загрузчик
-    const loadingElement = document.getElementById('loading');
-    if (loadingElement) {
-        loadingElement.style.display = 'none';
+class PsychologyWebsite {
+    constructor() {
+        this.init();
     }
-    
-    // Создаем основную структуру приложения
-    renderMainApp();
-    
-    // Инициализируем навигацию
-    initNavigation();
-    
-    console.log('✅ Приложение успешно инициализировано');
-}
 
-// Рендер основного приложения
-function renderMainApp() {
-    const root = document.getElementById('root');
-    
-    root.innerHTML = `
-        <div class="app-wrapper">
-            <!-- Навигация -->
-            <nav class="navbar">
-                <div class="container d-flex justify-between align-center">
-                    <div class="nav-brand">
-                        <h3 class="text-primary">🧠 Психологический кабинет</h3>
-                    </div>
-                    <div class="nav-menu" id="navMenu">
-                        <a href="#home" class="nav-link active">Главная</a>
-                        <a href="#services" class="nav-link">Услуги</a>
-                        <a href="#about" class="nav-link">О нас</a>
-                        <a href="#contact" class="nav-link">Контакты</a>
-                    </div>
-                    <button class="nav-toggle" id="navToggle">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                </div>
-            </nav>
+    init() {
+        console.log('🧠 Психологический кабинет v2.0 загружен');
+        
+        this.initNavigation();
+        this.initScrollEffects();
+        this.initFormHandling();
+        this.initAnimations();
+        this.checkApiStatus();
+        
+        // Запускаем после загрузки DOM
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.onDOMReady());
+        } else {
+            this.onDOMReady();
+        }
+    }
 
-            <!-- Основной контент -->
-            <main class="main-content" id="mainContent">
-                <!-- Hero секция -->
-                <section id="home" class="hero-section">
-                    <div class="container text-center">
-                        <div class="hero-content fade-in">
-                            <h1 class="hero-title">Добро пожаловать в новый психологический кабинет</h1>
-                            <p class="hero-subtitle">Профессиональная психологическая помощь и поддержка</p>
-                            <div class="hero-actions mt-4">
-                                <button class="btn btn-primary">Записаться на консультацию</button>
-                                <button class="btn btn-outline">Узнать больше</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+    onDOMReady() {
+        this.addScrollListeners();
+        this.initIntersectionObserver();
+        this.addInteractivity();
+    }
 
-                <!-- Секция услуг -->
-                <section id="services" class="services-section">
-                    <div class="container">
-                        <h2 class="text-center mb-5">Наши услуги</h2>
-                        <div class="services-grid">
-                            <div class="card service-card">
-                                <h3>Индивидуальные консультации</h3>
-                                <p>Персональный подход к решению ваших психологических задач</p>
-                                <button class="btn btn-outline">Подробнее</button>
-                            </div>
-                            <div class="card service-card">
-                                <h3>Семейная терапия</h3>
-                                <p>Работа с семейными отношениями и конфликтами</p>
-                                <button class="btn btn-outline">Подробнее</button>
-                            </div>
-                            <div class="card service-card">
-                                <h3>Групповые занятия</h3>
-                                <p>Работа в группе для решения общих проблем</p>
-                                <button class="btn btn-outline">Подробнее</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+    // Навигация
+    initNavigation() {
+        const navbar = document.getElementById('navbar');
+        const navToggle = document.getElementById('nav-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const navLinks = document.querySelectorAll('.nav-link');
 
-                <!-- Секция контактов -->
-                <section id="contact" class="contact-section bg-light">
-                    <div class="container">
-                        <h2 class="text-center mb-5">Связаться с нами</h2>
-                        <div class="contact-content">
-                            <div class="contact-info">
-                                <h3>Контактная информация</h3>
-                                <p>📧 Email: info@psychology-cabinet.ru</p>
-                                <p>📞 Телефон: +7 (999) 123-45-67</p>
-                                <p>📍 Адрес: г. Москва, ул. Примерная, д. 123</p>
-                            </div>
-                            <div class="contact-form">
-                                <h3>Напишите нам</h3>
-                                <form id="contactForm">
-                                    <div class="form-group">
-                                        <label class="form-label">Имя</label>
-                                        <input type="text" class="form-control" id="name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Сообщение</label>
-                                        <textarea class="form-control" id="message" rows="4" required></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Отправить</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </main>
+        // Мобильное меню
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                this.toggleNavIcon(navToggle);
+            });
+        }
 
-            <!-- Футер -->
-            <footer class="footer bg-dark text-light">
-                <div class="container text-center">
-                    <p>&copy; 2025 Психологический кабинет. Все права защищены.</p>
-                    <p class="text-secondary">Создано с ❤️ для вашего благополучия</p>
-                </div>
-            </footer>
-        </div>
-    `;
-}
+        // Плавная прокрутка
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    this.smoothScrollTo(href.substring(1));
+                    
+                    // Закрыть мобильное меню
+                    if (navMenu) {
+                        navMenu.classList.remove('active');
+                        this.toggleNavIcon(navToggle, false);
+                    }
+                }
+            });
+        });
 
-// Инициализация навигации
-function initNavigation() {
-    const navToggle = document.getElementById('navToggle');
-    const navMenu = document.getElementById('navMenu');
-    const navLinks = document.querySelectorAll('.nav-link');
+        // Скролл навбара
+        if (navbar) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
+    }
 
-    // Мобильное меню
-    if (navToggle && navMenu) {
-        navToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            navToggle.classList.toggle('active');
+    toggleNavIcon(toggle, forceClose = null) {
+        if (!toggle) return;
+        
+        const spans = toggle.querySelectorAll('span');
+        const isOpen = forceClose !== null ? !forceClose : toggle.classList.contains('active');
+        
+        if (isOpen) {
+            toggle.classList.remove('active');
+            spans[0].style.transform = 'rotate(0deg) translateY(0px)';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'rotate(0deg) translateY(0px)';
+        } else {
+            toggle.classList.add('active');
+            spans[0].style.transform = 'rotate(45deg) translateY(7px)';
+            spans[1].style.opacity = '0';
+            spans[2].style.transform = 'rotate(-45deg) translateY(-7px)';
+        }
+    }
+
+    smoothScrollTo(targetId) {
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+            const offsetTop = targetElement.offsetTop - 80; // Учитываем высоту навбара
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    // Эффекты прокрутки
+    initScrollEffects() {
+        this.observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+    }
+
+    initIntersectionObserver() {
+        if (!window.IntersectionObserver) {
+            // Fallback для старых браузеров
+            document.querySelectorAll('.slide-up').forEach(el => {
+                el.classList.add('visible');
+            });
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Добавляем задержку для последовательной анимации
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.style.transitionDelay = `${delay}ms`;
+                    }, 100);
+                }
+            });
+        }, this.observerOptions);
+
+        // Наблюдаем за элементами
+        document.querySelectorAll('.slide-up, .service-card, .testimonial-card').forEach((el, index) => {
+            el.dataset.delay = index * 100; // Задержка для каждого элемента
+            observer.observe(el);
         });
     }
 
-    // Плавная прокрутка к секциям
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(targetId);
+    // Обработка формы
+    initFormHandling() {
+        const contactForm = document.getElementById('contact-form');
+        
+        if (contactForm) {
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await this.handleFormSubmission(contactForm);
+            });
+        }
+
+        // Валидация в реальном времени
+        this.addRealTimeValidation();
+    }
+
+    async handleFormSubmission(form) {
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        console.log('📧 Отправка формы:', data);
+        
+        // Показываем индикатор загрузки
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span>⏳ Отправляем...</span>';
+        submitBtn.disabled = true;
+
+        try {
+            // Имитация отправки (заменить на реальный API)
+            const response = await this.submitToAPI(data);
             
-            if (targetSection) {
-                targetSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+            if (response.success) {
+                this.showNotification('✅ Спасибо за заявку! Мы свяжемся с вами в ближайшее время.', 'success');
+                form.reset();
                 
-                // Обновляем активную ссылку
-                navLinks.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-                
-                // Закрываем мобильное меню
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
+                // Отправляем в WhatsApp (опционально)
+                this.sendToWhatsApp(data);
+            } else {
+                throw new Error('Ошибка сервера');
             }
-        });
-    });
+        } catch (error) {
+            console.error('Ошибка отправки:', error);
+            this.showNotification('❌ Произошла ошибка. Попробуйте связаться с нами по телефону.', 'error');
+        } finally {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }
 
-    // Обработка формы контактов
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', handleContactForm);
+    async submitToAPI(data) {
+        // Реальный API запрос
+        const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Ошибка сервера');
+        }
+
+        return await response.json();
+    }
+
+    sendToWhatsApp(data) {
+        const phone = '79197448522';
+        const message = `Новая заявка с сайта:
+Имя: ${data.name}
+Телефон: ${data.phone}
+Email: ${data.email || 'не указан'}
+Услуга: ${data.service}
+Сообщение: ${data.message || 'не указано'}`;
+        
+        const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        // Открываем в новом окне через небольшую задержку
+        setTimeout(() => {
+            window.open(whatsappUrl, '_blank');
+        }, 2000);
+    }
+
+    addRealTimeValidation() {
+        const inputs = document.querySelectorAll('input[required], select[required]');
+        
+        inputs.forEach(input => {
+            input.addEventListener('blur', () => {
+                this.validateField(input);
+            });
+            
+            input.addEventListener('input', () => {
+                if (input.classList.contains('error')) {
+                    this.validateField(input);
+                }
+            });
+        });
+    }
+
+    validateField(field) {
+        const isValid = field.checkValidity();
+        
+        if (isValid) {
+            field.classList.remove('error');
+            field.classList.add('valid');
+        } else {
+            field.classList.remove('valid');
+            field.classList.add('error');
+        }
+        
+        return isValid;
+    }
+
+    // Анимации и интерактивность
+    initAnimations() {
+        // Добавляем класс для анимаций после загрузки
+        setTimeout(() => {
+            document.body.classList.add('loaded');
+        }, 100);
+    }
+
+    addScrollListeners() {
+        let ticking = false;
+        
+        const handleScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    this.updateScrollProgress();
+                    this.handleParallax();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+
+    updateScrollProgress() {
+        const scrolled = window.pageYOffset;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrolled / maxScroll) * 100;
+        
+        // Можно добавить индикатор прогресса
+        const progressBar = document.querySelector('.scroll-progress');
+        if (progressBar) {
+            progressBar.style.width = `${progress}%`;
+        }
+    }
+
+    handleParallax() {
+        const scrolled = window.pageYOffset;
+        const parallaxElements = document.querySelectorAll('.floating-shapes');
+        
+        parallaxElements.forEach(element => {
+            const speed = 0.5;
+            element.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+    }
+
+    addInteractivity() {
+        // Анимация кнопок при наведении
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.style.transform = 'translateY(-3px)';
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = '';
+            });
+        });
+
+        // Анимация карточек услуг
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px) rotateX(5deg)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+    }
+
+    // Проверка статуса API
+    async checkApiStatus() {
+        try {
+            const response = await fetch('/api/health');
+            const data = await response.json();
+            
+            const statusElement = document.getElementById('api-status');
+            if (statusElement) {
+                if (data.success) {
+                    statusElement.textContent = '🟢 Система работает';
+                    statusElement.style.color = '#00D4AA';
+                } else {
+                    throw new Error('API недоступен');
+                }
+            }
+        } catch (error) {
+            const statusElement = document.getElementById('api-status');
+            if (statusElement) {
+                statusElement.textContent = '🟡 Техническое обслуживание';
+                statusElement.style.color = '#FFB347';
+            }
+            console.warn('API недоступен:', error);
+        }
+    }
+
+    // Система уведомлений
+    showNotification(message, type = 'success') {
+        // Удаляем существующие уведомления
+        document.querySelectorAll('.notification').forEach(n => n.remove());
+        
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <span class="notification-message">${message}</span>
+                <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Показываем уведомление
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        // Автоматически скрываем через 5 секунд
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+        }, 5000);
+    }
+
+    // Утилиты
+    debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    throttle(func, limit) {
+        let inThrottle;
+        return function() {
+            const args = arguments;
+            const context = this;
+            if (!inThrottle) {
+                func.apply(context, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        };
     }
 }
 
-// Обработка формы контактов
-function handleContactForm(e) {
-    e.preventDefault();
-    
-    const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        message: document.getElementById('message').value
-    };
-    
-    console.log('📧 Отправка сообщения:', formData);
-    
-    // Здесь будет отправка на сервер
-    alert('Спасибо за сообщение! Мы свяжемся с вами в ближайшее время.');
-    
-    // Очищаем форму
-    e.target.reset();
-}
-
-// Добавляем CSS стили для компонентов
-function addComponentStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-        .app-wrapper {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .navbar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 1rem 0;
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-link {
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background: #007bff;
-            color: white !important;
-            text-decoration: none;
-        }
-
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            background: none;
-            border: none;
-            cursor: pointer;
-            gap: 4px;
-        }
-
-        .nav-toggle span {
-            width: 25px;
-            height: 3px;
-            background: #333;
-            transition: 0.3s;
-        }
-
-        .main-content {
-            margin-top: 80px;
-            flex: 1;
-        }
-
-        .hero-section {
-            padding: 100px 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .hero-title {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            opacity: 0.9;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .services-section {
-            padding: 80px 0;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .service-card {
-            text-align: center;
-        }
-
-        .contact-section {
-            padding: 80px 0;
-        }
-
-        .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .footer {
-            padding: 2rem 0;
-            margin-top: auto;
-        }
-
-        @media (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                top: 80px;
-                left: 0;
-                right: 0;
-                background: white;
-                flex-direction: column;
-                padding: 2rem;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-                transform: translateY(-100%);
-                opacity: 0;
-                visibility: hidden;
-                transition: all 0.3s ease;
-            }
-
-            .nav-menu.active {
-                transform: translateY(0);
-                opacity: 1;
-                visibility: visible;
-            }
-
-            .nav-toggle {
-                display: flex;
-            }
-
-            .hero-title {
-                font-size: 2rem;
-            }
-
-            .hero-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .contact-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-// Запуск приложения
-document.addEventListener('DOMContentLoaded', () => {
-    addComponentStyles();
-    initApp();
-});
+// Инициализация
+const website = new PsychologyWebsite();
 
 // Экспорт для использования в других модулях
-export { APP_CONFIG, initApp }; 
+export default website;
+
+console.log('✅ Современный психологический кабинет готов к работе!'); 
