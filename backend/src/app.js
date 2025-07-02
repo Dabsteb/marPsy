@@ -44,14 +44,16 @@ app.use(helmet({
 // Middleware для сжатия
 app.use(compression());
 
-// CORS - разрешаем все домены для Railway
+// CORS - разрешаем все домены для Railway и кастомный домен
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
         ? function(origin, callback) {
-            // Разрешаем Railway домены и localhost
+            // Разрешаем Railway домены, кастомный домен и localhost
             const allowedOrigins = [
                 /^https:\/\/.*\.up\.railway\.app$/,
                 /^https:\/\/.*\.railway\.app$/,
+                'https://psychologyforeveryday.com',
+                'http://psychologyforeveryday.com',
                 'http://localhost:3000',
                 'http://localhost:5000'
             ];
@@ -70,7 +72,9 @@ app.use(cors({
         : [
             'http://localhost:3000', 
             'http://127.0.0.1:3000',
-            'http://localhost:5000'   // Main site
+            'http://localhost:5000',   // Main site
+            'https://psychologyforeveryday.com',
+            'http://psychologyforeveryday.com'
         ],
     credentials: true
 }));
