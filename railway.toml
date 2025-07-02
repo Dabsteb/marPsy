@@ -14,5 +14,5 @@ NODE_ENV = "production"
 name = "backend"
 source = "."
 [services.build]
-buildCommand = "cd backend && npm install"
-startCommand = "cd backend && npm start" 
+buildCommand = "npm install"
+startCommand = "npm start" 

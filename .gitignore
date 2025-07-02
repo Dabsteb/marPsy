@@ -1,56 +1,8 @@
 # Dependencies
 node_modules/
-package-lock.json
-
-# Environment variables
-.env
-.env.local
-.env.production
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-
-# Runtime data
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
-
-# Build directories
-dist/
-build/
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Temporary files
-*.tmp
-*.temp
-temp/
-
-# Uploads directory (если содержит пользовательские файлы)
-uploads/
-
-# Old backups
-Old-SITE/
-old-site-backup/
-temp-backup/
+backend/node_modules/
+frontend/main-site/node_modules/
+frontend/admin-panel/node_modules/
 
 # Build outputs
 dist/
@@ -61,7 +13,10 @@ frontend/main-site/build/
 frontend/admin-panel/build/
 
 # Environment variables
+.env
+.env.local
 .env.development
+.env.production
 backend/.env
 frontend/main-site/.env*
 frontend/admin-panel/.env*
@@ -151,6 +106,15 @@ public
 *.swo
 *~
 
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
 # Temporary files
 tmp/
 temp/
@@ -192,6 +156,10 @@ env.example
 index.html
 styles.css
 create_structure.bat
+
+# Old backups
+Old-SITE/
+old-site-backup/
 
 # Documentation and reports (move to docs/)
 *.md

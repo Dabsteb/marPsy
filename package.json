@@ -5,16 +5,16 @@
   "main": "src/app.js",
   "scripts": {
     "install:all": "npm install",
-    "dev": "npm run start",
-    "dev:backend": "npm run start",
-    "dev:frontend": "echo 'Frontend not configured'",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm start",
+    "dev:frontend": "cd frontend/main-site && npm run dev",
     "build": "npm install",
     "start": "node src/app.js",
     "test": "echo \"Tests will be added later\" && exit 0",
     "clean": "npm run clean:modules && npm run clean:dist",
-    "clean:modules": "rimraf node_modules",
-    "clean:dist": "rimraf dist",
-    "setup": "npm install",
+    "clean:modules": "rimraf node_modules backend/node_modules frontend/main-site/node_modules",
+    "clean:dist": "rimraf frontend/main-site/dist backend/dist",
+    "setup": "npm run install:all && npm run env:setup",
     "env:setup": "echo \"Environment setup completed\"",
     "status": "echo \"🚀 Psychology Cabinet v2.0 - Ready for development!\""
   },
@@ -72,6 +72,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/psychology-cabinet-v2"
-  }
+    "url": "https://github.com/Dabsteb/marPsy"
+  },
+  "workspaces": [
+    "backend",
+    "frontend/main-site"
+  ]
 }
