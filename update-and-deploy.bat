@@ -1,19 +1,29 @@
 @echo off
-echo 🚀 Обновление проекта для Railway...
-echo.
-
-:: Добавляем все изменения
-"C:\Program Files\Git\bin\git.exe" add .
-
-:: Создаем коммит
-"C:\Program Files\Git\bin\git.exe" commit -m "Force Railway redeploy"
-
-:: Пушим в репозиторий (Railway автоматически подхватит)
-"C:\Program Files\Git\bin\git.exe" push origin main
+chcp 65001 > nul
+title 🚀 Обновление и деплой - Psychology Cabinet v2.0
 
 echo.
-echo ✅ Все изменения отправлены!
-echo 🌐 Railway начнет автоматический деплой через несколько секунд
-echo 📱 Проверьте статус на: https://railway.com/project/40dad6f6-e6c0-47ce-9d7e-ac4f5849d86f
+echo ╔══════════════════════════════════════════════════════════════════╗
+echo ║               🚀 ОБНОВЛЕНИЕ И АВТОДЕПЛОЙ                         ║
+echo ║         Психологический кабинет Марины Чикаидзе v2.0            ║
+echo ╚══════════════════════════════════════════════════════════════════╝
+echo.
+
+echo 📦 Собираем фронтенд...
+cd frontend/main-site
+call npm run build
+cd ../../
+
+echo 🔄 Добавляем изменения в git...
+git add .
+git commit -m "🎨 Обновление дизайна и функций сайта психолога"
+
+echo 🚀 Отправляем на Railway...
+git push origin main
+
+echo.
+echo ✅ ГОТОВО! 
+echo 🌐 Сайт будет обновлен на Railway в течение 1-2 минут
+echo 📱 Ссылка: backend-production-2c24.up.railway.app
 echo.
 pause 
