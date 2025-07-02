@@ -23,14 +23,12 @@ if (process.env.MONGODB_URI) {
     .catch(err => console.log('❌ MongoDB ошибка:', err.message));
 }
 
+// Статические файлы
+app.use(express.static('public'));
+
 // Основные маршруты
 app.get('/', (req, res) => {
-    res.json({
-        success: true,
-        message: '🎉 Психологический кабинет запущен!',
-        timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'development'
-    });
+    res.sendFile(__dirname + '/../public/index.html');
 });
 
 app.get('/api/status', (req, res) => {
