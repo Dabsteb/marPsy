@@ -3,13 +3,13 @@ echo 🚀 Обновление проекта для Railway...
 echo.
 
 :: Добавляем все изменения
-git add .
+"C:\Program Files\Git\bin\git.exe" add .
 
 :: Создаем коммит
-git commit -m "Fix Railway deployment configuration - ready for production"
+"C:\Program Files\Git\bin\git.exe" commit -m "🔄 Обновление проекта: синхронизация с GitHub и Railway"
 
 :: Пушим в репозиторий (Railway автоматически подхватит)
-git push origin main
+"C:\Program Files\Git\bin\git.exe" push origin main
 
 echo.
 echo ✅ Все изменения отправлены!
