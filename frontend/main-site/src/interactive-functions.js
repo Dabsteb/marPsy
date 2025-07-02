@@ -4,182 +4,53 @@
 let currentQuizStep = 1;
 const totalQuizSteps = 4;
 
-// Система переключения тем с красивыми анимациями
-function toggleTheme() {
-    const currentTheme = document.body.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    // Добавляем класс анимации перехода
-    document.body.classList.add('theme-transition');
-    
-    // Создаем эффект переключения
-    createThemeTransitionEffect(newTheme);
-    
-    // Небольшая задержка для плавности
-    setTimeout(() => {
-        setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-        
-        // Убираем класс анимации после завершения
-        setTimeout(() => {
-            document.body.classList.remove('theme-transition');
-        }, 400);
-    }, 100);
-}
-
+// Система переключения тем (как в примере - простая и надежная)
 function setTheme(theme) {
-    document.body.setAttribute('data-theme', theme);
-    updateThemeIcon(theme, true);
-}
-
-function updateThemeIcon(theme, animated = false) {
+    const htmlElement = document.documentElement;
     const themeIcon = document.getElementById('theme-icon');
-    if (!themeIcon) return;
     
-    // Анимация иконки
-    if (animated) {
-        themeIcon.style.transform = 'rotate(180deg) scale(0.8)';
-        
+    if (theme === 'dark') {
+        htmlElement.classList.add('dark');
+        if (themeIcon) {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        }
+    } else {
+        htmlElement.classList.remove('dark');
+        if (themeIcon) {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+    }
+    localStorage.setItem('theme', theme);
+}
+
+function toggleTheme() {
+    const htmlElement = document.documentElement;
+    const themeButton = document.getElementById('theme-toggle-button');
+    
+    if (htmlElement.classList.contains('dark')) {
+        setTheme('light');
+    } else {
+        setTheme('dark');
+    }
+    
+    // Добавляем эффект при нажатии
+    if (themeButton) {
+        themeButton.style.transform = 'scale(0.95)';
         setTimeout(() => {
-            if (theme === 'dark') {
-                themeIcon.className = 'fas fa-moon';
-                themeIcon.style.color = '#ffd43b';
-            } else {
-                themeIcon.className = 'fas fa-sun';
-                themeIcon.style.color = '#ff6b35';
-            }
-            
-            themeIcon.style.transform = 'rotate(0deg) scale(1)';
-        }, 200);
-    } else {
-        if (theme === 'dark') {
-            themeIcon.className = 'fas fa-moon';
-            themeIcon.style.color = '#ffd43b';
-        } else {
-            themeIcon.className = 'fas fa-sun';
-            themeIcon.style.color = '#ff6b35';
-        }
+            themeButton.style.transform = '';
+        }, 150);
     }
 }
 
-// Создание эффекта перехода темы
-function createThemeTransitionEffect(newTheme) {
-    const overlay = document.createElement('div');
-    overlay.style.position = 'fixed';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100vw';
-    overlay.style.height = '100vh';
-    overlay.style.pointerEvents = 'none';
-    overlay.style.zIndex = '99999';
-    overlay.style.opacity = '0';
-    
-    if (newTheme === 'dark') {
-        overlay.style.background = 'radial-gradient(circle at center, rgba(102, 126, 234, 0.3) 0%, rgba(15, 15, 26, 0.8) 70%)';
-        overlay.style.animation = 'darkThemeWave 0.6s ease-out forwards';
-    } else {
-        overlay.style.background = 'radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.7) 70%)';
-        overlay.style.animation = 'lightThemeWave 0.6s ease-out forwards';
-    }
-    
-    document.body.appendChild(overlay);
-    
-    setTimeout(() => {
-        if (overlay.parentNode) {
-            overlay.parentNode.removeChild(overlay);
-        }
-    }, 600);
-}
-
-// Инициализация системы тем
+// Инициализация темы при загрузке
 function initThemeSystem() {
-    // Загрузка сохраненной темы или автоопределение
     const savedTheme = localStorage.getItem('theme');
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const currentTheme = savedTheme || systemTheme;
-    
-    // Применение темы без анимации при загрузке
-    setTheme(currentTheme);
-    
-    // Слушатель изменения системной темы
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('theme')) {
-            const newTheme = e.matches ? 'dark' : 'light';
-            setTheme(newTheme);
-        }
-    });
-}
-
-// Добавление CSS анимаций для эффектов перехода тем
-function addThemeTransitionStyles() {
-    if (!document.querySelector('#theme-transition-styles')) {
-        const style = document.createElement('style');
-        style.id = 'theme-transition-styles';
-        style.textContent = `
-            /* Анимации для переходов между темами */
-            @keyframes darkThemeWave {
-                0% {
-                    opacity: 0;
-                    transform: scale(0) rotate(0deg);
-                }
-                50% {
-                    opacity: 1;
-                    transform: scale(1.2) rotate(180deg);
-                }
-                100% {
-                    opacity: 0;
-                    transform: scale(2.5) rotate(360deg);
-                }
-            }
-            
-            @keyframes lightThemeWave {
-                0% {
-                    opacity: 0;
-                    transform: scale(0);
-                    filter: brightness(0.5);
-                }
-                50% {
-                    opacity: 1;
-                    transform: scale(1.2);
-                    filter: brightness(1.2);
-                }
-                100% {
-                    opacity: 0;
-                    transform: scale(2.5);
-                    filter: brightness(2);
-                }
-            }
-            
-            /* Дополнительные анимации для элементов */
-            .theme-transition .btn,
-            .theme-transition .sidebar,
-            .theme-transition .theme-toggle,
-            .theme-transition .toast {
-                animation: elementGlow 0.6s ease-in-out;
-            }
-            
-            @keyframes elementGlow {
-                0%, 100% { filter: brightness(1); }
-                50% { filter: brightness(1.3); }
-            }
-            
-            /* Плавная анимация для иконок */
-            .fas, .fab, .far {
-                transition: transform 0.3s ease, color 0.3s ease, filter 0.3s ease !important;
-            }
-            
-            /* Анимация свечения для темной темы */
-            [data-theme="dark"] .btn:hover,
-            [data-theme="dark"] .theme-toggle:hover {
-                animation: darkGlow 2s ease-in-out infinite;
-            }
-            
-            @keyframes darkGlow {
-                0%, 100% { box-shadow: var(--shadow-elevated), var(--glow-button); }
-                50% { box-shadow: var(--shadow-elevated), var(--glow-accent); }
-            }
-        `;
-        document.head.appendChild(style);
+    if (savedTheme) {
+        setTheme(savedTheme);
+    } else {
+        setTheme('light'); // Тема по умолчанию
     }
 }
 
@@ -398,16 +269,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Инициализируем систему тем
     initThemeSystem();
     
-    // Добавляем CSS анимации для эффектов перехода
-    addThemeTransitionStyles();
-    
     // Инициализируем звезды
     initStarRating();
     
+    // Инициализируем чат
+    initChatSystem();
+    
     // Обработчики событий
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
+    const themeToggleButton = document.getElementById('theme-toggle-button');
+    if (themeToggleButton) {
+        themeToggleButton.addEventListener('click', toggleTheme);
     }
     
     const sidebarToggle = document.getElementById('sidebar-toggle');
@@ -520,6 +391,194 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 3000);
 });
 
+// ===== СИСТЕМА ЧАТА И УВЕДОМЛЕНИЙ =====
+
+let unreadMessagesCount = 0;
+let chatOpen = false;
+let userId = 'user_' + Math.random().toString(36).substr(2, 9);
+let userName = 'Клиент';
+
+// Открытие/закрытие чата
+function toggleChat() {
+    const chatSidebar = document.getElementById('chat-sidebar');
+    const chatButton = document.getElementById('chat-notification-button');
+    
+    chatOpen = !chatOpen;
+    
+    if (chatOpen) {
+        chatSidebar.classList.add('open');
+        // Сбрасываем счетчик при открытии
+        unreadMessagesCount = 0;
+        updateNotificationBadge();
+        scrollChatToBottom();
+    } else {
+        chatSidebar.classList.remove('open');
+    }
+    
+    // Анимация кнопки
+    if (chatButton) {
+        chatButton.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            chatButton.style.transform = '';
+        }, 150);
+    }
+}
+
+function closeChat() {
+    const chatSidebar = document.getElementById('chat-sidebar');
+    chatSidebar.classList.remove('open');
+    chatOpen = false;
+}
+
+// Обновление счетчика уведомлений
+function updateNotificationBadge() {
+    const badge = document.getElementById('chat-notification-badge');
+    if (badge) {
+        if (unreadMessagesCount > 0) {
+            badge.textContent = unreadMessagesCount > 99 ? '99+' : unreadMessagesCount;
+            badge.classList.add('show');
+        } else {
+            badge.classList.remove('show');
+        }
+    }
+}
+
+// Отображение сообщения
+function displayChatMessage(message, isOwn = false) {
+    const chatMessages = document.getElementById('chat-messages');
+    if (!chatMessages) return;
+    
+    const messageElement = document.createElement('div');
+    messageElement.className = `message-bubble ${isOwn ? 'message-self' : 'message-other'}`;
+    
+    const currentTime = new Date().toLocaleTimeString('ru-RU', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+    
+    messageElement.innerHTML = `
+        ${!isOwn ? '<div class="message-info">Марина Чикаидзе • Психолог</div>' : ''}
+        <div class="message-text">${message}</div>
+        <div class="message-time">${currentTime}</div>
+    `;
+    
+    chatMessages.appendChild(messageElement);
+    scrollChatToBottom();
+    
+    // Увеличиваем счетчик если чат закрыт и сообщение не наше
+    if (!chatOpen && !isOwn) {
+        unreadMessagesCount++;
+        updateNotificationBadge();
+    }
+}
+
+// Прокрутка чата вниз
+function scrollChatToBottom() {
+    const chatMessages = document.getElementById('chat-messages');
+    if (chatMessages) {
+        setTimeout(() => {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 100);
+    }
+}
+
+// Отправка сообщения
+function sendChatMessage() {
+    const input = document.getElementById('chat-message-input');
+    if (!input) return;
+    
+    const message = input.value.trim();
+    if (message === '') return;
+    
+    // Отображаем сообщение пользователя
+    displayChatMessage(message, true);
+    input.value = '';
+    
+    // Имитируем ответ психолога через 1-3 секунды
+    const responses = [
+        "Понимаю ваши чувства. Расскажите подробнее, что именно вас беспокоит? 🤗",
+        "Это действительно важная тема. Как долго вы с этим сталкиваетесь?",
+        "Спасибо, что поделились. Давайте разберем эту ситуацию вместе.",
+        "Я вижу, что это для вас значимо. Какие эмоции вы испытываете?",
+        "Хорошо, что вы обратились за помощью. Это первый шаг к решению! 💪",
+        "Интересная ситуация. А как вы сами видите возможные пути решения?",
+        "Давайте попробуем посмотреть на это с другой стороны...",
+        "Я готова помочь вам в этом. Хотели бы записаться на полноценную консультацию? 📅"
+    ];
+    
+    setTimeout(() => {
+        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        displayChatMessage(randomResponse, false);
+        
+        // Показываем уведомление если чат закрыт
+        if (!chatOpen) {
+            showToast('<i class="fas fa-comments"></i> Новое сообщение от психолога', 'success');
+        }
+    }, 1000 + Math.random() * 2000);
+}
+
+// Инициализация чата
+function initChatSystem() {
+    const chatButton = document.getElementById('chat-notification-button');
+    const closeChatButton = document.getElementById('close-chat-button');
+    const sendButton = document.getElementById('chat-send-button');
+    const chatInput = document.getElementById('chat-message-input');
+    
+    // События
+    if (chatButton) {
+        chatButton.addEventListener('click', toggleChat);
+    }
+    
+    if (closeChatButton) {
+        closeChatButton.addEventListener('click', closeChat);
+    }
+    
+    if (sendButton) {
+        sendButton.addEventListener('click', sendChatMessage);
+    }
+    
+    if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
+    }
+    
+    // Закрытие чата при клике вне его
+    document.addEventListener('click', (e) => {
+        const chatSidebar = document.getElementById('chat-sidebar');
+        const chatButton = document.getElementById('chat-notification-button');
+        
+        if (chatSidebar && chatButton && 
+            !chatSidebar.contains(e.target) && 
+            !chatButton.contains(e.target) && 
+            chatOpen) {
+            closeChat();
+        }
+    });
+    
+    // Имитация активности психолога
+    setTimeout(() => {
+        if (unreadMessagesCount === 0) {
+            displayChatMessage("Если у вас есть вопросы - пишите! Я онлайн и готова помочь 😊", false);
+        }
+    }, 8000);
+    
+    // Дополнительные советы через случайные интервалы
+    setTimeout(() => {
+        if (unreadMessagesCount === 0) {
+            displayChatMessage("💡 Совет дня: Выделите 5 минут на глубокое дыхание - это поможет снизить стресс", false);
+        }
+    }, 20000);
+    
+    setTimeout(() => {
+        if (unreadMessagesCount === 0) {
+            displayChatMessage("📖 Помните: каждый маленький шаг к психологическому здоровью важен!", false);
+        }
+    }, 45000);
+}
+
 // Экспорт для совместимости
 window.toggleTheme = toggleTheme;
 window.setTheme = setTheme;
@@ -530,4 +589,7 @@ window.closeQuiz = closeQuiz;
 window.nextQuizStep = nextQuizStep;
 window.prevQuizStep = prevQuizStep;
 window.submitQuiz = submitQuiz;
-window.showToast = showToast; 
+window.showToast = showToast;
+window.toggleChat = toggleChat;
+window.closeChat = closeChat;
+window.sendChatMessage = sendChatMessage; 

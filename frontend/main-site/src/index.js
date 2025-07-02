@@ -501,7 +501,7 @@ ${data.message ? `Сообщение: ${data.message}` : ''}`;
 
     // Переключатель темы
     initThemeToggle() {
-        const themeToggle = document.getElementById('theme-toggle');
+        const themeToggle = document.getElementById('theme-toggle-button');
         const themeIcon = document.getElementById('theme-icon');
         
         if (!themeToggle || !themeIcon) return;
@@ -514,8 +514,9 @@ ${data.message ? `Сообщение: ${data.message}` : ''}`;
         this.setTheme(initialTheme);
         
         themeToggle.addEventListener('click', () => {
-            const currentTheme = document.body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            const htmlElement = document.documentElement;
+            const isDark = htmlElement.classList.contains('dark');
+            const newTheme = isDark ? 'light' : 'dark';
             this.setTheme(newTheme);
             localStorage.setItem('theme', newTheme);
         });
@@ -529,10 +530,21 @@ ${data.message ? `Сообщение: ${data.message}` : ''}`;
     }
     
     setTheme(theme) {
-        document.body.setAttribute('data-theme', theme);
+        const htmlElement = document.documentElement;
         const themeIcon = document.getElementById('theme-icon');
-        if (themeIcon) {
-            themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        
+        if (theme === 'dark') {
+            htmlElement.classList.add('dark');
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        } else {
+            htmlElement.classList.remove('dark');
+            if (themeIcon) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
         }
     }
 
