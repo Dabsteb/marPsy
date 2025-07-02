@@ -4,19 +4,182 @@
 let currentQuizStep = 1;
 const totalQuizSteps = 4;
 
-// Переключение темы
+// Система переключения тем с красивыми анимациями
 function toggleTheme() {
     const currentTheme = document.body.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    
+    // Добавляем класс анимации перехода
+    document.body.classList.add('theme-transition');
+    
+    // Создаем эффект переключения
+    createThemeTransitionEffect(newTheme);
+    
+    // Небольшая задержка для плавности
+    setTimeout(() => {
+        setTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        // Убираем класс анимации после завершения
+        setTimeout(() => {
+            document.body.classList.remove('theme-transition');
+        }, 400);
+    }, 100);
 }
 
 function setTheme(theme) {
     document.body.setAttribute('data-theme', theme);
+    updateThemeIcon(theme, true);
+}
+
+function updateThemeIcon(theme, animated = false) {
     const themeIcon = document.getElementById('theme-icon');
-    if (themeIcon) {
-        themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    if (!themeIcon) return;
+    
+    // Анимация иконки
+    if (animated) {
+        themeIcon.style.transform = 'rotate(180deg) scale(0.8)';
+        
+        setTimeout(() => {
+            if (theme === 'dark') {
+                themeIcon.className = 'fas fa-moon';
+                themeIcon.style.color = '#ffd43b';
+            } else {
+                themeIcon.className = 'fas fa-sun';
+                themeIcon.style.color = '#ff6b35';
+            }
+            
+            themeIcon.style.transform = 'rotate(0deg) scale(1)';
+        }, 200);
+    } else {
+        if (theme === 'dark') {
+            themeIcon.className = 'fas fa-moon';
+            themeIcon.style.color = '#ffd43b';
+        } else {
+            themeIcon.className = 'fas fa-sun';
+            themeIcon.style.color = '#ff6b35';
+        }
+    }
+}
+
+// Создание эффекта перехода темы
+function createThemeTransitionEffect(newTheme) {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.pointerEvents = 'none';
+    overlay.style.zIndex = '99999';
+    overlay.style.opacity = '0';
+    
+    if (newTheme === 'dark') {
+        overlay.style.background = 'radial-gradient(circle at center, rgba(102, 126, 234, 0.3) 0%, rgba(15, 15, 26, 0.8) 70%)';
+        overlay.style.animation = 'darkThemeWave 0.6s ease-out forwards';
+    } else {
+        overlay.style.background = 'radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.7) 70%)';
+        overlay.style.animation = 'lightThemeWave 0.6s ease-out forwards';
+    }
+    
+    document.body.appendChild(overlay);
+    
+    setTimeout(() => {
+        if (overlay.parentNode) {
+            overlay.parentNode.removeChild(overlay);
+        }
+    }, 600);
+}
+
+// Инициализация системы тем
+function initThemeSystem() {
+    // Загрузка сохраненной темы или автоопределение
+    const savedTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const currentTheme = savedTheme || systemTheme;
+    
+    // Применение темы без анимации при загрузке
+    setTheme(currentTheme);
+    
+    // Слушатель изменения системной темы
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+            const newTheme = e.matches ? 'dark' : 'light';
+            setTheme(newTheme);
+        }
+    });
+}
+
+// Добавление CSS анимаций для эффектов перехода тем
+function addThemeTransitionStyles() {
+    if (!document.querySelector('#theme-transition-styles')) {
+        const style = document.createElement('style');
+        style.id = 'theme-transition-styles';
+        style.textContent = `
+            /* Анимации для переходов между темами */
+            @keyframes darkThemeWave {
+                0% {
+                    opacity: 0;
+                    transform: scale(0) rotate(0deg);
+                }
+                50% {
+                    opacity: 1;
+                    transform: scale(1.2) rotate(180deg);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(2.5) rotate(360deg);
+                }
+            }
+            
+            @keyframes lightThemeWave {
+                0% {
+                    opacity: 0;
+                    transform: scale(0);
+                    filter: brightness(0.5);
+                }
+                50% {
+                    opacity: 1;
+                    transform: scale(1.2);
+                    filter: brightness(1.2);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(2.5);
+                    filter: brightness(2);
+                }
+            }
+            
+            /* Дополнительные анимации для элементов */
+            .theme-transition .btn,
+            .theme-transition .sidebar,
+            .theme-transition .theme-toggle,
+            .theme-transition .toast {
+                animation: elementGlow 0.6s ease-in-out;
+            }
+            
+            @keyframes elementGlow {
+                0%, 100% { filter: brightness(1); }
+                50% { filter: brightness(1.3); }
+            }
+            
+            /* Плавная анимация для иконок */
+            .fas, .fab, .far {
+                transition: transform 0.3s ease, color 0.3s ease, filter 0.3s ease !important;
+            }
+            
+            /* Анимация свечения для темной темы */
+            [data-theme="dark"] .btn:hover,
+            [data-theme="dark"] .theme-toggle:hover {
+                animation: darkGlow 2s ease-in-out infinite;
+            }
+            
+            @keyframes darkGlow {
+                0%, 100% { box-shadow: var(--shadow-elevated), var(--glow-button); }
+                50% { box-shadow: var(--shadow-elevated), var(--glow-accent); }
+            }
+        `;
+        document.head.appendChild(style);
     }
 }
 
@@ -232,11 +395,11 @@ function highlightStars(stars, rating) {
 
 // Инициализация при загрузке
 document.addEventListener('DOMContentLoaded', function() {
-    // Определяем начальную тему
-    const savedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
-    setTheme(initialTheme);
+    // Инициализируем систему тем
+    initThemeSystem();
+    
+    // Добавляем CSS анимации для эффектов перехода
+    addThemeTransitionStyles();
     
     // Инициализируем звезды
     initStarRating();
@@ -355,13 +518,6 @@ document.addEventListener('DOMContentLoaded', function() {
             showQuizPrompt();
         }
     }, 3000);
-    
-    // Слушаем системные изменения темы
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('theme')) {
-            setTheme(e.matches ? 'dark' : 'light');
-        }
-    });
 });
 
 // Экспорт для совместимости
