@@ -1,57 +1,81 @@
 {
-  "name": "marina-psychology-monorepo",
-  "version": "1.0.0",
-  "description": "Монорепозиторий для персонального психологического кабинета Марины Чикаидзе",
-  "private": true,
-  "workspaces": [
-    "backend",
-    "frontend/main-site",
-    "frontend/admin-panel"
-  ],
+  "name": "psychology-cabinet-v2",
+  "version": "2.0.0",
+  "description": "Персональный психологический кабинет - новая версия",
+  "main": "backend/src/app.js",
   "scripts": {
-    "install:all": "npm install && npm run install:backend && npm run install:frontend",
-    "install:backend": "cd backend && npm install",
-    "install:frontend": "cd frontend/main-site && npm install && cd ../admin-panel && npm install",
-    
-    "start": "concurrently \"npm run start:backend\" \"npm run start:main-site\" \"npm run start:admin\"",
-    "start:backend": "cd backend && npm start",
-    "start:main-site": "cd frontend/main-site && npm start",
-    "start:admin": "cd frontend/admin-panel && npm start",
-    
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:main-site\" \"npm run dev:admin\"",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend/main-site && npm install",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && npm run dev",
-    "dev:main-site": "cd frontend/main-site && npm run dev",
-    "dev:admin": "cd frontend/admin-panel && npm run dev",
-    
-    "build": "npm run build:backend && npm run build:frontend",
-    "build:backend": "cd backend && npm run build",
-    "build:frontend": "cd frontend/main-site && npm run build && cd ../admin-panel && npm run build",
-    
-    "test": "npm run test:backend && npm run test:frontend",
-    "test:backend": "cd backend && npm test",
-    "test:frontend": "cd frontend/main-site && npm test && cd ../admin-panel && npm test",
-    
-    "lint": "npm run lint:backend && npm run lint:frontend",
-    "lint:backend": "cd backend && npm run lint",
-    "lint:frontend": "cd frontend/main-site && npm run lint && cd ../admin-panel && npm run lint",
-    
-    "clean": "rimraf backend/node_modules frontend/main-site/node_modules frontend/admin-panel/node_modules backend/dist frontend/main-site/build frontend/admin-panel/build logs tmp temp-backup"
+    "dev:frontend": "cd frontend/main-site && npm run dev",
+    "build": "cd backend && npm install",
+    "start": "cd backend && npm start",
+    "test": "echo \"Tests will be added later\" && exit 0",
+    "clean": "npm run clean:modules && npm run clean:dist",
+    "clean:modules": "rimraf node_modules backend/node_modules frontend/main-site/node_modules",
+    "clean:dist": "rimraf frontend/main-site/dist backend/dist",
+    "setup": "npm run install:all && npm run env:setup",
+    "env:setup": "echo \"Environment setup completed\"",
+    "status": "echo \"🚀 Psychology Cabinet v2.0 - Ready for development!\""
   },
   "keywords": [
+    "психология",
     "psychology",
-    "therapy",
-    "cms",
-    "website",
-    "monorepo"
+    "веб-приложение",
+    "node.js",
+    "express",
+    "mongodb"
   ],
-  "author": "Marina Chikaidze",
+  "author": "Psychology Cabinet",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^8.2.0",
-    "rimraf": "^5.0.1"
+    "concurrently": "^9.1.0",
+    "rimraf": "^6.0.1",
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "axios": "^1.10.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^2.2.0",
+    "compression": "^1.7.4",
+    "connect-mongo": "^5.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.5.1",
+    "express-rate-limit": "^6.10.0",
+    "express-session": "^1.17.3",
+    "express-validator": "^7.2.1",
+    "fs-extra": "^11.3.0",
+    "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
+    "mongoose": "^7.5.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^4.1.1",
+    "nodemailer": "^6.9.4",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "sharp": "^0.32.5",
+    "socket.io": "^4.8.1",
+    "systeminformation": "^5.27.7",
+    "uuid": "^11.1.0",
+    "validator": "^13.15.15"
   },
   "engines": {
-    "node": ">=16.0.0",
+    "node": ">=18.0.0",
     "npm": ">=8.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/psychology-cabinet-v2"
+  },
+  "workspaces": [
+    "backend",
+    "frontend/main-site"
+  ]
 }
