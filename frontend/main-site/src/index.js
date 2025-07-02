@@ -265,9 +265,9 @@ ${data.message ? `Сообщение: ${data.message}` : ''}`;
         const value = field.value.trim();
         let isValid = true;
         let errorMessage = '';
-
+        
         // Убираем предыдущие ошибки
-        field.classList.remove('error');
+            field.classList.remove('error');
         const existingError = field.parentNode.querySelector('.field-error');
         if (existingError) {
             existingError.remove();
@@ -304,7 +304,7 @@ ${data.message ? `Сообщение: ${data.message}` : ''}`;
             errorElement.style.marginTop = '0.25rem';
             field.parentNode.appendChild(errorElement);
         }
-
+        
         return isValid;
     }
 
@@ -385,12 +385,12 @@ ${data.message ? `Сообщение: ${data.message}` : ''}`;
             const response = await fetch('/api/health');
             const data = await response.json();
             
-            if (data.success) {
+                if (data.success) {
                 console.log('API подключен:', data.message);
                 
                 // Показываем индикатор работы API
                 this.showApiStatus(true);
-            } else {
+                } else {
                 throw new Error('API недоступно');
             }
         } catch (error) {
