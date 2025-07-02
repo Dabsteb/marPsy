@@ -9,7 +9,7 @@ class PsychologyWebsite {
     }
 
     init() {
-        console.log('🧠 Психологический кабинет v2.0 загружен');
+        console.log('Психологический кабинет v2.0 загружен');
         
         this.initNavigation();
         this.initScrollEffects();
@@ -161,12 +161,12 @@ class PsychologyWebsite {
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
         
-        console.log('📧 Отправка формы:', data);
+        console.log('Отправка формы:', data);
         
         // Показываем индикатор загрузки
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<span>⏳ Отправляем...</span>';
+        submitBtn.innerHTML = '<span><i class="fas fa-spinner fa-spin"></i> Отправляем...</span>';
         submitBtn.disabled = true;
 
         try {
@@ -174,7 +174,7 @@ class PsychologyWebsite {
             const response = await this.submitToAPI(data);
             
             if (response.success) {
-                this.showNotification('✅ Спасибо за заявку! Мы свяжемся с вами в ближайшее время.', 'success');
+                this.showNotification('<i class="fas fa-check-circle"></i> Спасибо за заявку! Мы свяжемся с вами в ближайшее время.', 'success');
                 form.reset();
                 
                 // Отправляем в WhatsApp (опционально)
@@ -184,7 +184,7 @@ class PsychologyWebsite {
             }
         } catch (error) {
             console.error('Ошибка отправки:', error);
-            this.showNotification('❌ Произошла ошибка. Попробуйте связаться с нами по телефону.', 'error');
+            this.showNotification('<i class="fas fa-times-circle"></i> Произошла ошибка. Попробуйте связаться с нами по телефону.', 'error');
         } finally {
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
@@ -377,7 +377,7 @@ ${data.message ? `Сообщение: ${data.message}` : ''}`;
             const data = await response.json();
             
             if (data.success) {
-                console.log('✅ API подключен:', data.message);
+                console.log('API подключен:', data.message);
                 
                 // Показываем индикатор работы API
                 this.showApiStatus(true);
@@ -410,8 +410,8 @@ ${data.message ? `Сообщение: ${data.message}` : ''}`;
         `;
         
         statusIndicator.innerHTML = isConnected 
-            ? '🟢 Онлайн' 
-            : '🔴 Офлайн';
+            ? '<i class="fas fa-check-circle" style="color: green"></i> Онлайн' 
+            : '<i class="fas fa-times-circle" style="color: red"></i> Офлайн';
         
         // Удаляем предыдущий индикатор
         const existing = document.getElementById('api-status');
@@ -497,4 +497,4 @@ const website = new PsychologyWebsite();
 // Экспорт для использования в других модулях
 export default website;
 
-console.log('✅ Современный психологический кабинет готов к работе!'); 
+console.log('Современный психологический кабинет готов к работе!'); 
